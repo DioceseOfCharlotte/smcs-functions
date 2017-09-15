@@ -7,7 +7,9 @@
  * Author:      Marty Helmick
  * Author URI:  https://github.com/m-e-h
  * Text Domain: smcs
- * GitHub Plugin URI: DioceseOfCharlotte/smcs-functions
+ * GitHub Plugin URI: https://github.com/DioceseOfCharlotte/smcs-functions
+ * Requires WP:  4.8
+ * Requires PHP: 5.4
  */
 
  /**
