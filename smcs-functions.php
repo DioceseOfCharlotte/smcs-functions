@@ -3,7 +3,7 @@
  * Plugin Name: SMCS Functions
  * Plugin URI:  https://github.com/DioceseOfCharlotte/smcs-functions
  * Description: Functions for altering or adding to the default behavior of various plugins on the SMCS site.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Marty Helmick
  * Author URI:  https://github.com/m-e-h
  * Text Domain: smcs
@@ -68,8 +68,20 @@ final class SmcsFunctions {
 	public function includes() {
 
 		require_once( $this->dir . 'lib/extended-cpts/extended-cpts.php' );
+		require_once( $this->dir . 'inc/user-roles.php' );
 		require_once( $this->dir . 'inc/post-types.php' );
 		require_once( $this->dir . 'inc/restrict-content.php' );
+	}
+
+	/**
+	 * Sets up initial actions.
+	 *
+	 * @since  1.0.0
+	 * @access private
+	 * @return void
+	 */
+	private function setup_actions() {
+		register_activation_hook( __FILE__, array( $this, 'activation' ) );
 	}
 
 	/**
@@ -79,9 +91,8 @@ final class SmcsFunctions {
 	 * @access private
 	 * @return void
 	 */
-	private function setup_actions() {
-
-		//flush_rewrite_rules();
+	public function activation() {
+		smcs_roles_on_plugin_activation();
 	}
 
 	/**
