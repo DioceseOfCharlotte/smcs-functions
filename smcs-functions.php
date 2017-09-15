@@ -1,15 +1,16 @@
 <?php
 /**
- * Plugin Name: SMCS Functions
- * Plugin URI:  https://github.com/DioceseOfCharlotte/smcs-functions
- * Description: Functions for altering or adding to the default behavior of various plugins on the SMCS site.
- * Version:     1.1.0
- * Author:      Marty Helmick
- * Author URI:  https://github.com/m-e-h
- * Text Domain: smcs
+ * Plugin Name:       SMCS Functions
+ * Plugin URI:        https://github.com/DioceseOfCharlotte/smcs-functions
+ * Description:       Functions for altering or adding to the default behavior of various plugins on the SMCS site.
+ * Version:           1.1.0
+ * Author:            Marty Helmick
+ * License:           GNU General Public License v2
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       smcs
  * GitHub Plugin URI: https://github.com/DioceseOfCharlotte/smcs-functions
- * Requires WP:  4.8
- * Requires PHP: 5.4
+ * Requires WP:       4.7
+ * Requires PHP:      5.4
  */
 
  /**
