@@ -1,3 +1,7 @@
+#### 1.3.0 / 2017-09-15
+* add registration forms post-types
+* allow post-type to be chosen for RCP pages
+
 #### 1.2.0 / 2017-09-15
 * cleaned up dev files
 
