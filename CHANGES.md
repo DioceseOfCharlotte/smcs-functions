@@ -1,3 +1,6 @@
+#### 1.4.0 / 2017-09-22
+* add Access Role taxonomy
+
 #### 1.3.0 / 2017-09-15
 * add registration forms post-types
 * allow post-type to be chosen for RCP pages
