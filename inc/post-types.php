@@ -124,3 +124,34 @@ function registration_forms_cpt() {
 
 }
 add_action( 'init', 'registration_forms_cpt' );
+
+
+
+// Register Custom Taxonomy
+function sm_access_taxonomy() {
+
+	$labels = array(
+		'name'                       => _x( 'Access Roles', 'Taxonomy General Name', 'smcs' ),
+		'singular_name'              => _x( 'Access Role', 'Taxonomy Singular Name', 'smcs' ),
+		'menu_name'                  => __( 'Access Roles', 'smcs' ),
+		'all_items'                  => __( 'All Access Roles', 'smcs' ),
+		'new_item_name'              => __( 'New Access Role', 'smcs' ),
+		'add_new_item'               => __( 'Add New Access Role', 'smcs' ),
+		'edit_item'                  => __( 'Edit Access Role', 'smcs' ),
+		'update_item'                => __( 'Update Access Role', 'smcs' ),
+		'view_item'                  => __( 'View Access Role', 'smcs' ),
+	);
+	$args = array(
+		'labels'                     => $labels,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => false,
+		'show_tagcloud'              => false,
+		'rewrite'                    => false,
+	);
+	register_taxonomy( 'smcs_access', array( 'page', 'smcs_athletics' ), $args );
+
+}
+add_action( 'init', 'sm_access_taxonomy' );
