@@ -19,6 +19,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 1. Logo
 
 == Changelog ==
+#### 1.5.2 / 2017-09-26
+* add args for tax content permissions.
+
 #### 1.5.0 / 2017-09-26
 * add Member and Group registration functions.
 

@@ -1,3 +1,6 @@
+#### 1.5.2 / 2017-09-26
+* add args for tax content permissions.
+
 #### 1.5.0 / 2017-09-26
 * add Member and Group registration functions.
 

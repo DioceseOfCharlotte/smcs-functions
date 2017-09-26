@@ -9,7 +9,7 @@ if ( ! function_exists( 'rcp_is_restricted_content' ) ) {
 	return;
 }
 
-add_filter( 'members_can_user_view_post', 'smcs_tax_content_permissions' );
+add_filter( 'members_can_user_view_post', 'smcs_tax_content_permissions', 10, 3 );
 add_filter( 'gform_username_40', 'smcs_parent_username', 10, 4 );
 add_action( 'gform_user_registered', 'smcs_create_rcp_member', 10, 4 );
 
