@@ -74,9 +74,10 @@ function jp_rcp_pages_filter( $pages ) {
 function smcs_parent_username( $username, $feed, $form, $entry ) {
 
 	$username = strtolower( rgar( $entry, '2.3' ) . rgar( $entry, '2.6' ) );
+	$user_email = strtolower( $entry['10'] );
 
 	if ( empty( $username ) ) {
-		return $username;
+		$username = $user_email;
 	}
 
 	if ( ! function_exists( 'username_exists' ) ) {
@@ -124,6 +125,10 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 	$member_display_name = $member_first_name . ' ' . $member_last_name;
 	$username = strtolower( "{$member_first_name}{$member_last_name}" );
 
+	if ( empty( $username ) ) {
+		$username = $member_email;
+	}
+
 	if ( username_exists( $username ) ) {
 		$i = 2;
 		while ( username_exists( $username . $i ) ) {
@@ -141,6 +146,10 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 			'user_login'   => $username,
 			'display_name' => $member_display_name,
 		);
+
+		// if ( empty( $args['user_login'] ) ) {
+		// 	$args['user_login'] = $args['user_email'];
+		// }
 
 		// create a new user if member does not already exist
 		if ( $member_user = get_user_by( 'email', $member_email ) ) {
