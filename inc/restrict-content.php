@@ -9,11 +9,11 @@ if ( ! function_exists( 'rcp_is_restricted_content' ) ) {
 	return;
 }
 
-// Allow per post Members roles to be selectable from a taxonomy.
 add_filter( 'members_can_user_view_post', 'smcs_tax_content_permissions' );
+add_filter( 'gform_username_40', 'smcs_parent_username', 10, 4 );
 add_action( 'gform_user_registered', 'smcs_create_rcp_member', 10, 4 );
 
-
+// Allow per post Members roles to be selectable from a taxonomy.
 function smcs_tax_content_permissions( $can_view, $user_id, $post_id ) {
 
 	$terms = get_terms( array(
@@ -58,7 +58,7 @@ function jp_rcp_pages_filter( $pages ) {
 	remove_filter( 'get_pages', 'jp_rcp_pages_filter' );
 
 	$custom_posts = get_pages( array(
-		'post_type' => 'registration_pages', // change to your custom post type
+		'post_type' => 'registration_pages',
 		'post_status' => 'publish',
 	) );
 
@@ -71,53 +71,98 @@ function jp_rcp_pages_filter( $pages ) {
 	return $pages;
 }
 
+function smcs_parent_username( $username, $feed, $form, $entry ) {
 
-function meh_is_in_same_group( $user_id = 0, $compare_user_id ) {
-	$user_id = $user_id ? $user_id : get_current_user_id();
-	$user_group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
-	$compare_group_id = rcpga_group_accounts()->members->get_group_id( $compare_user_id );
+	$username = strtolower( rgar( $entry, '2.3' ) . rgar( $entry, '2.6' ) );
 
-	if ( $user_group_id != $compare_group_id ) {
-		return false;
+	if ( empty( $username ) ) {
+		return $username;
 	}
+
+	if ( ! function_exists( 'username_exists' ) ) {
+		require_once( ABSPATH . WPINC . '/registration.php' );
+	}
+
+	if ( username_exists( $username ) ) {
+		$i = 2;
+		while ( username_exists( $username . $i ) ) {
+			$i++;
+		}
+		$username = $username . $i;
+	};
+
+	return $username;
+
 }
-
-
 
 function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 
-	// $user_id = $entry['created_by'];
-	//$user_id = get_current_user_id();
+	$add_user_args = array(
+		'subscription_id' => 1,
+		'status'          => 'active',
+	);
+
+	rcp_add_user_to_subscription( $user_id, $add_user_args );
+
 	$group_name = $entry['1'];
-	$member_email = $entry['3'];
-	$member_first_name = $entry['4.3'];
-	$member_last_name = $entry['4.6'];
-	$member_invite = empty( $entry['36'] ) ? false : true;
 	$level_id   = rcp_get_subscription_id( $user_id );
 	$seat_count = rcpga_get_level_group_seats_allowed( $level_id );
 
-	$add_group_args = array(
+	$add_group_accounts_args = array(
 		'owner_id'    => $user_id,
 		'name'        => $group_name,
 		'seats'       => $seat_count,
 	);
 
-	rcpga_group_accounts()->groups->add( $add_group_args );
+	rcpga_group_accounts()->groups->add( $add_group_accounts_args );
 
-	rcpga_add_member_to_group( array(
-	    'user_email'  => $member_email,
-	    'group_id'    => rcpga_group_accounts()->members->get_group_id( $user_id ),
-	    'send_invite' => false,
-	) );
+	$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$member_email = $entry['3'];
+	$member_first_name = $entry['4.3'];
+	$member_last_name = $entry['4.6'];
+	$send_invite = empty( $entry['36'] ) ? false : true;
+	$member_display_name = $member_first_name . ' ' . $member_last_name;
+	$username = strtolower( "{$member_first_name}{$member_last_name}" );
 
-	// Get the added members ID
+	if ( username_exists( $username ) ) {
+		$i = 2;
+		while ( username_exists( $username . $i ) ) {
+			$i++;
+		}
+		$username = $username . $i;
+	};
+
+	$member_add_args = array(
+		'user_email'   => $member_email,
+		'first_name'   => $member_first_name,
+		'last_name'    => $member_last_name,
+		'user_login'   => $username,
+		'display_name' => $member_display_name,
+	);
+
+	// create a new user if member does not already exist
 	if ( $member_user = get_user_by( 'email', $member_email ) ) {
 		$member_user_id = $member_user->ID;
+	} else {
+		$member_user_id = wp_insert_user( $member_add_args );
 	}
 
-	update_user_meta( $member_user_id, 'first_name', $member_first_name );
-	update_user_meta( $member_user_id, 'last_name', $member_last_name );
-	update_user_meta( $user_id, 'group_peer_id', $member_user_id );
-	update_user_meta( $member_user_id, 'group_owner_id', $user_id );
+	rcp_add_user_to_subscription( $member_user_id, $add_user_args );
 
+	$add_member_to_group_args = array(
+		'user_id'  => $member_user_id,
+		'group_id' => $group_id,
+		'role'     => 'admin',
+	);
+
+	// add the member to the group
+	rcpga_group_accounts()->members->add( $add_member_to_group_args );
+
+	update_user_meta( $user_id, 'group_admins_id', $member_user_id );
+	update_user_meta( $user_id, 'sm_group_id', $group_id );
+
+	update_user_meta( $member_user_id, 'group_owners_id', $user_id );
+	update_user_meta( $member_user_id, 'sm_group_id', $group_id );
+	// update_user_meta( $member_user_id, 'rcp_status', 'active' );
+	// update_user_meta( $member_user_id, 'rcp_subscription_level', '1' );
 }

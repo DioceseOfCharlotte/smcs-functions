@@ -1,3 +1,6 @@
+#### 1.5.0 / 2017-09-26
+* add Member and Group registration functions.
+
 #### 1.4.0 / 2017-09-22
 * add Access Role taxonomy
 
