@@ -132,37 +132,38 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 		$username = $username . $i;
 	};
 
-	$member_add_args = array(
-		'user_email'   => $member_email,
-		'first_name'   => $member_first_name,
-		'last_name'    => $member_last_name,
-		'user_login'   => $username,
-		'display_name' => $member_display_name,
-	);
+	if ( ! empty( $member_email ) ) {
 
-	// create a new user if member does not already exist
-	if ( $member_user = get_user_by( 'email', $member_email ) ) {
-		$member_user_id = $member_user->ID;
-	} else {
-		$member_user_id = wp_insert_user( $member_add_args );
+		$member_add_args = array(
+			'user_email'   => $member_email,
+			'first_name'   => $member_first_name,
+			'last_name'    => $member_last_name,
+			'user_login'   => $username,
+			'display_name' => $member_display_name,
+		);
+
+		// create a new user if member does not already exist
+		if ( $member_user = get_user_by( 'email', $member_email ) ) {
+			$member_user_id = $member_user->ID;
+		} else {
+			$member_user_id = wp_insert_user( $member_add_args );
+		}
+
+		rcp_add_user_to_subscription( $member_user_id, $add_user_args );
+
+		$add_member_to_group_args = array(
+			'user_id'  => $member_user_id,
+			'group_id' => $group_id,
+			'role'     => 'admin',
+		);
+
+		// add the member to the group
+		rcpga_group_accounts()->members->add( $add_member_to_group_args );
+
+		update_user_meta( $member_user_id, 'group_owners_id', $user_id );
+		update_user_meta( $member_user_id, 'sm_group_id', $group_id );
+		update_user_meta( $user_id, 'group_admins_id', $member_user_id );
 	}
 
-	rcp_add_user_to_subscription( $member_user_id, $add_user_args );
-
-	$add_member_to_group_args = array(
-		'user_id'  => $member_user_id,
-		'group_id' => $group_id,
-		'role'     => 'admin',
-	);
-
-	// add the member to the group
-	rcpga_group_accounts()->members->add( $add_member_to_group_args );
-
-	update_user_meta( $user_id, 'group_admins_id', $member_user_id );
 	update_user_meta( $user_id, 'sm_group_id', $group_id );
-
-	update_user_meta( $member_user_id, 'group_owners_id', $user_id );
-	update_user_meta( $member_user_id, 'sm_group_id', $group_id );
-	// update_user_meta( $member_user_id, 'rcp_status', 'active' );
-	// update_user_meta( $member_user_id, 'rcp_subscription_level', '1' );
 }
