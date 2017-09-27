@@ -11,6 +11,7 @@ if ( ! function_exists( 'rcp_is_restricted_content' ) ) {
 
 add_filter( 'members_can_user_view_post', 'smcs_tax_content_permissions', 10, 3 );
 add_filter( 'gform_username_40', 'smcs_parent_username', 10, 4 );
+add_action( 'gform_user_updated', 'smcs_backup_display_name', 10, 4 );
 add_action( 'gform_user_registered', 'smcs_create_rcp_member', 10, 4 );
 
 // Allow per post Members roles to be selectable from a taxonomy.
@@ -95,6 +96,16 @@ function smcs_parent_username( $username, $feed, $form, $entry ) {
 	return $username;
 
 }
+
+function smcs_backup_display_name( $user_id, $feed, $entry, $user_pass ) {
+	// get display name from field 2
+	$display_name = rgar( $entry, '2.3' ) . ' ' . rgar( $entry, '2.6' );
+
+	if ( empty( $display_name ) ) {
+		update_user_meta( $user_id, 'display_name', strtolower( $entry['10'] ) );
+	}
+}
+
 
 function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 

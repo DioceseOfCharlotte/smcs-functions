@@ -19,6 +19,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 1. Logo
 
 == Changelog ==
+#### 1.5.3 / 2017-09-27
+* add email for display name if First Last isn't given.
+
 #### 1.5.2 / 2017-09-26
 * add args for tax content permissions.
 
