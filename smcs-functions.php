@@ -71,6 +71,7 @@ final class SmcsFunctions {
 	public function includes() {
 
 		require_once( $this->dir . 'lib/extended-cpts/extended-cpts.php' );
+		require_once( $this->dir . 'inc/term-content-permissions.php' );
 		require_once( $this->dir . 'inc/user-roles.php' );
 		require_once( $this->dir . 'inc/post-types.php' );
 		require_once( $this->dir . 'inc/restrict-content.php' );

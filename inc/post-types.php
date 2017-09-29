@@ -6,6 +6,41 @@
  */
 
 add_action( 'init', 'smcs_register_post_types' );
+add_action( 'init', 'members_cp_taxonomy' );
+
+// Register Custom Taxonomy
+function members_cp_taxonomy() {
+
+	$post_type_args = array(
+		'show_ui'   => true,
+	);
+
+	$post_types = get_post_types( $post_type_args );
+
+	$labels = array(
+		'name'                       => _x( 'Permission Categories', 'members-terms' ),
+		'singular_name'              => _x( 'Permission Category', 'members-terms' ),
+		'menu_name'                  => __( 'Permission Categories', 'members-terms' ),
+		'all_items'                  => __( 'Permission Categories', 'members-terms' ),
+		'add_new_item'               => __( 'Add New Category', 'members-terms' ),
+		'edit_item'                  => __( 'Edit Category', 'members-terms' ),
+		'update_item'                => __( 'Update Category', 'members-terms' ),
+		'view_item'                  => __( 'View Category', 'members-terms' ),
+
+	);
+	$args = array(
+		'labels'                     => $labels,
+		'hierarchical'               => false,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => false,
+		'show_tagcloud'              => false,
+		'rewrite'                    => false,
+	);
+	register_taxonomy( 'members_cp_tax', $post_types, $args );
+
+}
 
 
 /**
