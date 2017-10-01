@@ -6,7 +6,7 @@
  */
 
 add_action( 'init', 'smcs_register_post_types' );
-add_action( 'init', 'members_cp_taxonomy' );
+add_action( 'init', 'members_cp_taxonomy', 11 );
 
 // Register Custom Taxonomy
 function members_cp_taxonomy() {

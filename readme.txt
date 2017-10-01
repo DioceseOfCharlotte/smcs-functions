@@ -19,6 +19,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 1. Logo
 
 == Changelog ==
+#### 1.5.4 / 2017-10-1
+* move term-permission functions to a separate plugin.
+
 #### 1.5.3 / 2017-09-27
 * add email for display name if First Last isn't given.
 

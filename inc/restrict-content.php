@@ -14,41 +14,6 @@ add_filter( 'gform_username_40', 'smcs_parent_username', 10, 4 );
 add_action( 'gform_user_updated', 'smcs_backup_display_name', 10, 4 );
 add_action( 'gform_user_registered', 'smcs_create_rcp_member', 10, 4 );
 
-add_filter( 'members_can_user_view_post', 'mtcp_tax_content_permissions', 10, 3 );
-// Allow per post Members roles to be selectable from a taxonomy.
-function mtcp_tax_content_permissions( $can_view, $user_id, $post_id ) {
-
-	$post = get_post( $post_id );
-	$post_type = get_post_type_object( $post->post_type );
-	$taxonomy = 'members_cp_tax';
-	$terms = get_the_terms( $post_id, $taxonomy );
-
-	if ( ! empty( $terms ) ) {
-
-		foreach ( $terms as $term ) {
-
-			$term_roles = get_term_meta( $term->term_id, 'term_roles', false);
-
-			if ( ! empty( $term_roles ) ) {
-
-				$can_view = false;
-
-				if ( $post->post_author == $user_id || user_can( $user_id, 'restrict_content' ) || user_can( $user_id, $post_type->cap->edit_post, $post_id ) ) {
-					$can_view = true;
-				}
-
-				foreach ( $term_roles as $term_role ) {
-					if ( members_user_has_role( $user_id, $term_role ) ) {
-						$can_view = true;
-					}
-				}
-			}
-		}
-	}
-
-	return $can_view;
-}
-
 // Add registration CPT to RCP default page selections.
 add_action( 'current_screen', function() {
 	add_filter( 'get_pages', 'jp_rcp_pages_filter' );
