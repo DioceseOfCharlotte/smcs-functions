@@ -19,6 +19,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 1. Logo
 
 == Changelog ==
+#### 1.5.5 / 2017-10-1
+* remove the duplicate role taxonomy.
+
 #### 1.5.4 / 2017-10-1
 * move term-permission functions to a separate plugin.
 

@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.5.5 / 2017-10-1
+* remove the duplicate role taxonomy.
+
 #### 1.5.4 / 2017-10-1
 * move term-permission functions to a separate plugin.
 
