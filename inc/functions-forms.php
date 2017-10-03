@@ -1,9 +1,9 @@
 <?php
 
-$user_id = get_current_user_id();
-$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
-$owner_id = rcpga_group_accounts()->groups->get_owner_id( $group_id);
-$owner = get_user_by( 'id', $owner_id );
+// $user_id = get_current_user_id();
+// $group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
+// $owner_id = rcpga_group_accounts()->groups->get_owner_id( $group_id);
+// $owner = get_user_by( 'id', $owner_id );
 
 // if( $user ) {
 // 	wp_set_current_user( $user_id, $user->user_login );
@@ -11,11 +11,11 @@ $owner = get_user_by( 'id', $owner_id );
 // 	do_action( 'wp_login', $user->user_login );
 // }
 
-if ( is_single( '1496' ) ) {
-	if ( $group_id && rcpga_group_accounts()->members->is_group_admin() ) {
-		wp_set_current_user( $user_id, $owner->user_login );
-	}
-}
+// if ( is_single( '1496' ) ) {
+// 	if ( $group_id && rcpga_group_accounts()->members->is_group_admin() ) {
+// 		wp_set_current_user( $user_id, $owner->user_login );
+// 	}
+// }
 
 
 

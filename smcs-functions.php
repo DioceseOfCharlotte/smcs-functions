@@ -3,7 +3,7 @@
  * Plugin Name:       SMCS Functions
  * Plugin URI:        https://github.com/DioceseOfCharlotte/smcs-functions
  * Description:       Functions for altering or adding to the default behavior of various plugins on the SMCS site.
- * Version:           1.5.6
+ * Version:           1.5.7
  * Author:            Marty Helmick
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
