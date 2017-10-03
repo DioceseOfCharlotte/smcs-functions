@@ -5,7 +5,7 @@
  * @package  SMCS
  */
 
-add_action( 'init', 'sm_access_taxonomy' );
+add_action( 'init', 'sm_access_taxonomy', 11 );
 
 // Register Custom Taxonomy
 function sm_access_taxonomy() {
