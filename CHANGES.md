@@ -1,5 +1,9 @@
 # Change Log
 
+#### [unreleased]
+* Add a class of `is-administrator` if the logged in user is an administrator.
+* try to share user privileges between members.
+
 #### 1.5.5 / 2017-10-1
 * remove the duplicate role taxonomy.
 

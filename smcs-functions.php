@@ -13,12 +13,12 @@
  * Requires PHP:      5.4
  */
 
- /**
-  * Sets up the plugin
-  *
-  * @since  1.0.0
-  * @access public
-  */
+/**
+ * Sets up the plugin
+ *
+ * @since  1.0.0
+ * @access public
+ */
 final class SmcsFunctions {
 
 	/**
@@ -74,6 +74,8 @@ final class SmcsFunctions {
 		require_once( $this->dir . 'inc/post-types.php' );
 		require_once( $this->dir . 'inc/taxonomies.php' );
 		require_once( $this->dir . 'inc/restrict-content.php' );
+		require_once( $this->dir . 'inc/functions-forms.php' );
+		require_once( $this->dir . 'inc/functions-front-end.php' );
 	}
 
 	/**

@@ -19,6 +19,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 1. Logo
 
 == Changelog ==
+#### [unreleased]
+* Add a class of `is-administrator` if the logged in user is an administrator.
+
 #### 1.5.5 / 2017-10-1
 * remove the duplicate role taxonomy.
 
