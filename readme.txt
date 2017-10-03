@@ -21,6 +21,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 == Changelog ==
 #### [unreleased]
 
+#### 1.5.8 / 2017-10-3
+* add gf param for subscription status.
+
 #### 1.5.6 / 2017-10-3
 * bump the priority of the taxonomy so it shows on GV.
 * Add a class of `is-administrator` if the logged in user is an administrator.
