@@ -2,6 +2,9 @@
 
 #### [unreleased]
 
+#### 1.6.1 / 2017-10-5
+* more homepage redirects.
+
 #### 1.6.0 / 2017-10-4
 * redirect parents to the parent-home for homepage.
 

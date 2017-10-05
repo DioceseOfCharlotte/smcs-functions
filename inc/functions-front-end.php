@@ -16,7 +16,13 @@ function smcs_administrator_body_class( $classes ) {
 
 // redirect parents to the parent-home for homepage.
 function smcs_redirect_parent_home() {
-	if ( current_user_can( 'sm_family' ) && is_front_page() ) {
+	if ( current_user_can( 'sm_sports_admin' ) && is_front_page() ) {
+		wp_redirect( home_url( '/administration-athletics-home/' ) );
+		exit();
+	} elseif ( current_user_can( 'sm_pto_admin' ) && is_front_page() ) {
+		wp_redirect( home_url( '/admin-pto/' ) );
+		exit();
+	} elseif ( is_user_logged_in() && is_front_page() ) {
 		wp_redirect( home_url( '/parent-home/' ) );
 		exit();
 	}
