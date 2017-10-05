@@ -1,18 +1,32 @@
 <?php
+add_filter( 'gform_field_value_sm_subscription', 'sm_subscription_populate' );
+add_filter( 'login_redirect', 'smcs_login_redirect', 10, 3 );
 
 // dynamically populate a GF field with the RPC subscription ID.
-add_filter( 'gform_field_value_sm_subscription', 'sm_subscription_populate' );
 function sm_subscription_populate( $value ) {
 	return rcp_get_subscription_id( get_current_user_id() );
 }
 
+// Login redirects.
+function smcs_login_redirect( $url, $request, $user ) {
 
+	if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+		// athletics admins
+		if ( in_array( 'sm_sports_admin', $user->roles ) ) {
+			$url = home_url( '/administration-athletics-home/' );
 
+			// pto admins
+		} elseif ( in_array( 'sm_pto_admin', $user->roles ) ) {
+			$url = home_url( '/admin-pto/' );
 
+			// most others
+		} else {
+			$url = home_url( '/parent-home/' );
+		}
+	}
 
-
-
-
+	return $url;
+}
 
 // $user_id = get_current_user_id();
 // $group_id = rcpga_group_accounts()->members->get_group_id( $user_id );

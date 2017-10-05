@@ -21,6 +21,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 == Changelog ==
 #### [unreleased]
 
+#### 1.5.9 / 2017-10-4
+* add login redirects.
+
 #### 1.5.8 / 2017-10-3
 * add gf param for subscription status.
 
