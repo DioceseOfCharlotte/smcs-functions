@@ -21,6 +21,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 == Changelog ==
 #### [unreleased]
 
+#### 1.6.0 / 2017-10-4
+* redirect parents to the parent-home for homepage.
+
 #### 1.5.9 / 2017-10-4
 * add login redirects.
 
