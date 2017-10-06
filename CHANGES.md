@@ -2,6 +2,9 @@
 
 #### [unreleased]
 
+#### 1.6.2 / 2017-10-6
+* add login shortcode to redirect users where WE want them.
+
 #### 1.6.1 / 2017-10-5
 * more homepage redirects.
 
