@@ -14,7 +14,7 @@ function sm_register_shortcodes() {
 function sm_login_form_shortcode() {
 
 	$logoutlink = wp_logout_url( home_url() );
-	$passresetlink = home_url( '/member-login/?rcp_action=lostpassword' );
+	$passresetlink = wp_lostpassword_url();
 
 	if ( is_user_logged_in() ) {
 		return '<h2>You are already logged in!</h2><a class="btn button logout-button" href="' . $logoutlink . '">Logout</a>';
@@ -44,7 +44,7 @@ function sm_login_form_shortcode() {
 		'redirect' => $url,
 	);
 
-	return wp_login_form( $args ) . '<a class="reset-pass-link" href="' . $passresetlink . '" title="Reset Password">Request a Password Reset</a>';
+	return wp_login_form( $args ) . '<a class="reset-pass-link" href="' . $passresetlink . '" title="Lost Password">Lost your password?</a>';
 }
 
 // Login redirects.

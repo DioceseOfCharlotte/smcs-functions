@@ -2,6 +2,9 @@
 
 #### [unreleased]
 
+#### 1.6.3 / 2017-10-6
+* add custom-logo for login/lost-password page.
+
 #### 1.6.2 / 2017-10-6
 * add login shortcode to redirect users where WE want them.
 
