@@ -1,6 +1,8 @@
 # Change Log
 
 #### [unreleased]
+* add customizer background color to login screen.
+* add some subscription helper functions.
 
 #### 1.6.3 / 2017-10-6
 * add custom-logo for login/lost-password page.

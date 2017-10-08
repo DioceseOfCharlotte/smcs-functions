@@ -1,95 +1,68 @@
 <?php
 add_filter( 'gform_field_value_sm_subscription', 'sm_subscription_populate' );
-add_action( 'login_enqueue_scripts', 'smcs_login_logo' );
-add_filter( 'login_headerurl', 'smcs_login_logo_url' );
-add_filter( 'login_headertitle', 'smcs_login_logo_url_title' );
+add_filter( 'gform_field_value_is_smaa_member', 'is_user_smaa_member' );
 
 // dynamically populate a GF field with the RPC subscription ID.
 function sm_subscription_populate( $value ) {
-	return rcp_get_subscription_id( get_current_user_id() );
+	return sm_get_group_subscription_id();
 }
 
+// dynamically populate a GF field with true if user is SMAA Member.
+function is_user_smaa_member( $value ) {
+	$subscription_id = sm_get_group_subscription_id();
 
-add_theme_support( 'custom-logo', array(
-	'height'      => 78,
-	'flex-width' => true,
-) );
+	if ( 2 === $subscription_id ) {
+		return true;
+	}
 
-function smcs_login_logo() {
-	if ( ! has_custom_logo() ) { return; }
-	$bg_image = get_background_image();
-	$logo_image = wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ) ); ?>
-
-		<style id="login-custom-logo">
-			body.login {
-				background-image: url(<?php echo $bg_image ?>);
-				background-size: cover;
-			}
-			#login:after {
-				content: "";
-				background-color: rgba(255, 255, 255, 0.6);
-				width: 100%;
-				height: 100%;
-				position: absolute;
-				top: 0;
-				left: 0;
-				opacity: .9;
-				z-index: -1;
-			}
-			#login h1 a {
-				background-image: url(<?php echo $logo_image ?>);
-			}
-			#backtoblog {
-				display: none;
-			}
-			.login .login-links {
-				width: 272px;
-				margin: 12px auto 0;
-				font-size: 13px;
-			}
-			.login a {
-				text-decoration: none;
-				color: #555d66;
-			}
-			#login .message {
-				border-left: 4px solid #e7b20e;
-			}
-		</style>
-	<?php }
-
-function smcs_login_logo_url() {
-	return home_url();
+	return false;
 }
 
-function smcs_login_logo_url_title() {
-	ob_start();
-	bloginfo( 'name' );
-	return ob_get_clean();
+function sm_get_group_subscription_id() {
+	$user_id = get_current_user_id();
+	$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$group_count = rcpga_group_accounts()->members->count( $group_id );
+
+	if ( 2 > absint( $group_count ) ) {
+		return rcp_get_subscription_id( $user_id );
+	}
+
+	if ( rcpga_group_accounts()->members->is_group_admin( $user_id ) ) {
+		return rcp_get_subscription_id( $user_id );
+	}
+
+	$members = rcpga_group_accounts()->members->get_members( $group_id );
+	$member_one = $members[0]->user_id;
+	$member_two = $members[1]->user_id;
+
+	if ( rcpga_group_accounts()->members->is_group_admin( $member_two ) ) {
+		return rcp_get_subscription_id( $member_two );
+	}
+
+	if ( rcpga_group_accounts()->members->is_group_admin( $member_one ) ) {
+		return rcp_get_subscription_id( $member_one );
+	}
+
+	return rcp_get_subscription_id( $user_id );
 }
 
-// $user_id = get_current_user_id();
-// $group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
-// $owner_id = rcpga_group_accounts()->groups->get_owner_id( $group_id);
-// $owner = get_user_by( 'id', $owner_id );
+function sm_get_group_owner_meta( $user_id, $key ) {
+	$user_id = get_current_user_id();
+	$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$owner_id = rcpga_group_accounts()->groups->get_owner_id( $group_id );
 
-// if( $user ) {
-// 	wp_set_current_user( $user_id, $user->user_login );
-// 	wp_set_auth_cookie( $user_id );
-// 	do_action( 'wp_login', $user->user_login );
-// }
+	if ( $owner_id ) {
+		return get_user_meta( $owner_id, $key, true );
+	}
+}
 
-// if ( is_single( '1496' ) ) {
-// 	if ( $group_id && rcpga_group_accounts()->members->is_group_admin() ) {
-// 		wp_set_current_user( $user_id, $owner->user_login );
-// 	}
-// }
+// Register User Contact Methods
+function custom_user_contact_methods( $user_contact_method ) {
 
+	$user_contact_method['rcp_subscription_level'] = __( 'Subscription', 'text_domain' );
+	$user_contact_method['rcp_status'] = __( 'Status', 'text_domain' );
 
-// function meh_is_in_same_group( $user_id = 0, $compare_user_id ) {
-// 	$user_id = $user_id ? $user_id : get_current_user_id();
-// 	$user_group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
-// 	$compare_group_id = rcpga_group_accounts()->members->get_group_id( $compare_user_id );
-// 	if ( $user_group_id != $compare_group_id ) {
-// 		return false;
-// 	}
-// }
+	return $user_contact_method;
+
+}
+add_filter( 'user_contactmethods', 'custom_user_contact_methods' );
