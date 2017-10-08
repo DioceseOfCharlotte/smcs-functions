@@ -76,6 +76,7 @@ final class SmcsFunctions {
 		require_once( $this->dir . 'inc/restrict-content.php' );
 		require_once( $this->dir . 'inc/functions-forms.php' );
 		require_once( $this->dir . 'inc/functions-front-end.php' );
+		require_once( $this->dir . 'inc/functions-login-styles.php' );
 	}
 
 	/**
