@@ -97,7 +97,7 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 		// }
 
 		// create a new user if member does not already exist
-		if ( get_user_by( 'email', $member_email ) = $member_user ) {
+		if ( $member_user = get_user_by( 'email', $member_email ) ) {
 			$member_user_id = $member_user->ID;
 		} else {
 			$member_user_id = wp_insert_user( $member_add_args );

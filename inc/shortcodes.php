@@ -8,6 +8,10 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_login_form', 'sm_login_form_shortcode' );
 	// Add the `[sm_address]` shortcode.
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
+	// Add the `[sm_students]` shortcode.
+	add_shortcode( 'sm_students', 'sm_students_shortcode' );
+	// Add the `[sm_parent]` shortcode.
+	add_shortcode( 'sm_parent', 'sm_parent_shortcode' );
 	// Add the `[sm_family_name]` shortcode.
 	add_shortcode( 'sm_family_name', 'sm_family_name_shortcode' );
 	// Add the `[sm_home_phone]` shortcode.
@@ -19,7 +23,7 @@ function sm_family_name_shortcode( $atts ) {
 	$atts = shortcode_atts(
 		array(
 			'wrapper' => 'h3',
-			'class' => 'sm-family-name',
+			'class'   => 'sm-family-name',
 		),
 		$atts,
 		'sm_family_name'
@@ -43,8 +47,8 @@ function sm_home_phone_shortcode( $atts ) {
 
 	$atts = shortcode_atts(
 		array(
-			'wrapper' => 'div',
-			'class' => 'sm-home-phone',
+			'wrapper' => 'span',
+			'class'   => 'sm-home-phone',
 		),
 		$atts,
 		'sm_home_phone'
@@ -69,7 +73,7 @@ function sm_address_shortcode( $atts ) {
 	$atts = shortcode_atts(
 		array(
 			'wrapper' => 'div',
-			'class' => 'sm-address',
+			'class'   => 'sm-address',
 		),
 		$atts,
 		'sm_address'
@@ -77,22 +81,65 @@ function sm_address_shortcode( $atts ) {
 
 	$user_id = sm_get_group_owner_id();
 
-	$sm_street = get_user_meta( $user_id, 'sm_home_street', true );
-	$sm_city = get_user_meta( $user_id, 'sm_home_city', true );
-	$sm_state = get_user_meta( $user_id, 'sm_home_state', true );
-	$sm_home_zip = get_user_meta( $user_id, 'sm_home_zip', true );
-
 	$sm_address = '';
 
-	if ( $sm_city ) {
+	if ( sm_get_address( $user_id ) ) {
 		$sm_address .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
-		$sm_address .= "{$sm_street}<br>";
-		$sm_address .= "{$sm_city}, {$sm_state} {$sm_home_zip}";
+		$sm_address .= sm_get_address( $user_id );
 		$sm_address .= '</' . $atts['wrapper'] . '>';
 	}
 
 	return $sm_address;
+}
 
+function sm_students_shortcode( $atts ) {
+
+	$atts = shortcode_atts(
+		array(
+			'wrapper' => 'div',
+			'class'   => 'sm-students',
+		),
+		$atts,
+		'sm_students'
+	);
+
+	$user_id = sm_get_group_owner_id();
+
+	$sm_students = '';
+
+	if ( sm_get_students( $user_id ) ) {
+		$sm_students .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
+		$sm_students .= sm_get_students( $user_id );
+		$sm_students .= '</' . $atts['wrapper'] . '>';
+	}
+
+	return $sm_students;
+}
+
+function sm_parent_shortcode( $atts ) {
+
+	$atts = shortcode_atts(
+		array(
+			'parent'  => '1',
+			'wrapper' => 'div',
+			'class'   => 'sm-parent',
+		),
+		$atts,
+		'sm_parent'
+	);
+
+	$user_id = sm_get_group_owner_id();
+	$p_number = $atts['parent'];
+
+	$sm_parent = '';
+
+	if ( sm_get_parent( $user_id, $p_number ) ) {
+		$sm_parent .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
+		$sm_parent .= sm_get_parent( $user_id, $p_number );
+		$sm_parent .= '</' . $atts['wrapper'] . '>';
+	}
+
+	return $sm_parent;
 }
 
 // Add Shortcode
@@ -101,9 +148,9 @@ function sm_group_meta_shortcode( $atts ) {
 	// Attributes
 	$atts = shortcode_atts(
 		array(
-			'key' => 'first_name',
+			'key'     => 'first_name',
 			'wrapper' => 'div',
-			'class' => 'sm-group-data',
+			'class'   => 'sm-group-data',
 		),
 		$atts,
 		'sm_group_meta'
@@ -141,7 +188,7 @@ function sm_login_form_shortcode() {
 	}
 
 	$args = array(
-		'echo' => false,
+		'echo'     => false,
 		'redirect' => $url,
 	);
 
