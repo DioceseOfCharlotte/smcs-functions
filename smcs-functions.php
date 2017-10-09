@@ -73,10 +73,12 @@ final class SmcsFunctions {
 		require_once( $this->dir . 'inc/user-roles.php' );
 		require_once( $this->dir . 'inc/post-types.php' );
 		require_once( $this->dir . 'inc/taxonomies.php' );
+		require_once( $this->dir . 'inc/shortcodes.php' );
 		require_once( $this->dir . 'inc/restrict-content.php' );
 		require_once( $this->dir . 'inc/functions-forms.php' );
 		require_once( $this->dir . 'inc/functions-front-end.php' );
 		require_once( $this->dir . 'inc/functions-login-styles.php' );
+		require_once( $this->dir . 'inc/functions-family-profile.php' );
 	}
 
 	/**
