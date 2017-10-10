@@ -7,19 +7,18 @@
 }
 
 .sm-flex-panel {
-    display: flex;
+	display: flex;
 	flex-wrap: wrap;
-    justify-content: space-around;
-    width: 100%;
+	justify-content: space-around;
 	margin-bottom: 1rem;
 	padding: 1rem;
 }
 
 .sm-card {
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    min-width: 25%;
-    border-radius: 2px;
+	padding: 1rem 1.5rem;
+	margin-bottom: 1.5rem;
+	min-width: 25%;
+	border-radius: 2px;
 }
 
 .sm-shadow {
@@ -36,13 +35,42 @@
 }
 
 .s-grade {
-    font-size: 4rem;
+	font-size: 4rem;
 	line-height: 1;
-    font-weight: bolder;
-    opacity: 0.3;
+	font-weight: bolder;
+	opacity: 0.3;
 }
 
 #content .s-grade > .sm_card-subtitle {
 	margin-bottom: -.375rem;
+}
 
+.sm-card .gv-list-view.gv-list-view {
+    vertical-align: top;
+    max-width: 100%;
+	margin-bottom: 0;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+.gv-list-view.gv-no-results {
+    display: none;
+}
+
+.smcs-post .post-content {
+	max-width: 60rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.sm-narrow {
+	max-width: 55rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.sm-parent > div {
+    margin-bottom: 0.5rem;
 }

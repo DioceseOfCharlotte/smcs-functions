@@ -2,6 +2,9 @@
 
 #### [unreleased]
 
+#### 1.6.5 / 2017-10-10
+* add profile edit functions.
+
 #### 1.6.4 / 2017-10-09
 * add customizer background color to login screen.
 * add some subscription helper functions.

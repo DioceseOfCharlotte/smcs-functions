@@ -89,8 +89,8 @@ function sm_get_parent( $account_creater_id, $p_number = '1' ) {
 	if ( $sm_first ) {
 		$parent .= "<div class='sm-parent parent-{$p_number}'>";
 		$parent .= "<div class='parent-name'>{$sm_first} {$sm_last}</div>";
-		$parent .= "<div class='parent-email'>{$sm_email}</div>";
 		$parent .= "<div class='parent-phone'>{$sm_phone}</div>";
+		$parent .= "<div class='parent-email'>{$sm_email}</div>";
 		$parent .= '</div>';
 	}
 
@@ -111,5 +111,20 @@ function sm_get_template_part( $slug ) {
 		ob_start();
 		include( $template );
 		return ob_get_clean();
+	}
+}
+
+function has_user_account() {
+	$account_creater_id = sm_get_group_owner_id();
+	$parent_2_email = get_user_meta( $account_creater_id, 'sm_parent_2_email', true );
+	$member_user    = get_user_by( 'email', $parent_2_email );
+
+	if ( $member_user ) {
+		$member_user_id = $member_user->ID;
+		if ( get_current_user_id() === $member_user_id ) {
+			echo  '<a class="edit-btn" href="' . home_url( 'accounts/edit-profile/' ) . '">Edit</a>';
+		}
+	} else {
+		echo '<a class="edit-btn" href="' . home_url( 'accounts/add-group-member/' ) . '">Add this person to your family group.</a>';
 	}
 }

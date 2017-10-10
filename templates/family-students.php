@@ -8,14 +8,14 @@ if ( empty( $students ) ) {
 }
 ?>
 
-<h2 class="profile-section-title u-text-center u-1of1">Students</h2>
-<div class='sm-students sm-flex-panel sm-shadow sm-bg-white'>
+<h2 class="profile-section-title sm-narrow u-1of1">Students</h2>
+<div class='sm-students sm-flex-panel'>
 
 <?php
 foreach ( $students as $student ) {
 	if ( ! empty( ltrim( $student['name'] ) ) ) {
 	?>
-		<div class='sm-student sm-card u-text-center'>
+		<div class='sm-student sm-card sm-shadow sm-bg-white u-text-center'>
 			<div class='s-name u-h4'>
 				<?php echo $student['name']; ?>
 			</div>
@@ -27,5 +27,8 @@ foreach ( $students as $student ) {
 	}
 }
 ?>
+	<div class='u-1of1'>
+		<?php echo do_shortcode( '[gravityview id="1731"]' ); ?>
+	</div>
 </div>
 <?php
