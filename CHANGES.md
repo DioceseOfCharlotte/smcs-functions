@@ -1,6 +1,8 @@
 # Change Log
 
 #### [unreleased]
+
+#### 1.6.4 / 2017-10-09
 * add customizer background color to login screen.
 * add some subscription helper functions.
 * add shortcodes for family profile display.
