@@ -42,63 +42,74 @@ function sm_get_students( $user_id ) {
 	$students = '';
 
 	if ( $s_1_first ) {
-		$students .= '<ul>';
-		$students .= "<li><strong>{$s_1_grade}</strong> {$s_1_first} {$s_1_last}</li>";
-		if ( $s_2_first ) {
-			$students .= "<li><strong>{$s_2_grade}</strong> {$s_2_first} {$s_2_last}</li>";
-		}
-		if ( $s_3_first ) {
-			$students .= "<li><strong>{$s_3_grade}</strong> {$s_3_first} {$s_3_last}</li>";
-		}
-		if ( $s_4_first ) {
-			$students .= "<li><strong>{$s_4_grade}</strong> {$s_4_first} {$s_4_last}</li>";
-		}
-		if ( $s_5_first ) {
-			$students .= "<li><strong>{$s_5_grade}</strong> {$s_5_first} {$s_2_last}</li>";
-		}
-		$students .= '<ul>';
+		$students = array(
+			's1' => array(
+				'name' => $s_1_first . ' ' . $s_1_last,
+				'grade' => $s_1_grade,
+			),
+			's2' => array(
+				'name' => $s_2_first . ' ' . $s_2_last,
+				'grade' => $s_2_grade,
+			),
+			's3' => array(
+				'name' => $s_3_first . ' ' . $s_3_last,
+				'grade' => $s_3_grade,
+			),
+			's4' => array(
+				'name' => $s_4_first . ' ' . $s_4_last,
+				'grade' => $s_4_grade,
+			),
+			's5' => array(
+				'name' => $s_5_first . ' ' . $s_5_last,
+				'grade' => $s_5_grade,
+			),
+		);
 	}
 
 	return $students;
 }
 
-function sm_get_parent( $user_id, $p_number ) {
-	$p_number = $p_number ? $p_number : '1';
-	$user_id = sm_get_group_owner_id();
+function sm_get_parent( $account_creater_id, $p_number = '1' ) {
+	$account_creater_id = sm_get_group_owner_id();
+	$user_info = get_userdata( $account_creater_id );
 
-	$sm_first = get_user_meta( $user_id, "sm_parent_{$p_number}_first", true );
-	$sm_last = get_user_meta( $user_id, "sm_parent_{$p_number}_last", true );
-	$sm_email = get_user_meta( $user_id, "sm_parent_{$p_number}_email", true );
-	$sm_phone = get_user_meta( $user_id, "sm_parent_{$p_number}_phone", true );
+	$sm_first = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_first", true );
+	$sm_last = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_last", true );
+	$sm_email = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_email", true );
+	$sm_phone = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_phone", true );
 
-	if ( '1' == $p_number ) {
-		$sm_first = get_user_meta( $user_id, 'first_name', true );
-		$sm_last = get_user_meta( $user_id, 'last_name', true );
-		$sm_email = get_user_meta( $user_id, 'user_email', true );
+	if ( '1' == $p_number && ! empty( $user_info ) ) {
+		$sm_first = $user_info->first_name;;
+		$sm_last = $user_info->last_name;
+		$sm_email = $user_info->user_email;
 	}
 
 	$parent = '';
 
 	if ( $sm_first ) {
-		$parent .= "<h4>{$sm_first} {$sm_last}</h4>";
-		$parent .= "{$sm_email}<br>";
-		$parent .= "{$sm_phone}";
+		$parent .= "<div class='sm-parent parent-{$p_number}'>";
+		$parent .= "<div class='parent-name'>{$sm_first} {$sm_last}</div>";
+		$parent .= "<div class='parent-email'>{$sm_email}</div>";
+		$parent .= "<div class='parent-phone'>{$sm_phone}</div>";
+		$parent .= '</div>';
 	}
 
 	return $parent;
 }
 
-// sm_home_phone
-// sm_home_street
-// sm_home_city
-// sm_home_state
-// sm_home_zip
-// sm_parent_1_phone
-// sm_parent_2_first
-// sm_parent_2_last
-// sm_parent_2_email
-// sm_parent_2_phone
-//
-// sm_student_1_first
-// sm_student_1_last
-// sm_student_1_grade
+function sm_get_template_part( $slug ) {
+
+	$template = smcs_functions()->dir . "templates/{$slug}.php";
+	$theme_template = locate_template( array( "smcs/{$slug}.php" ) );
+
+	if ( $theme_template ) {
+		return get_template_part( "smcs/{$slug}" );
+	}
+
+	// If template is found, include it.
+	if ( $template ) {
+		ob_start();
+		include( $template );
+		return ob_get_clean();
+	}
+}

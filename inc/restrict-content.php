@@ -43,7 +43,7 @@ function sm_get_group_owner_id( $user_id = '0' ) {
 	$owner_id = rcpga_group_accounts()->groups->get_owner_id( $group_id );
 
 	if ( $owner_id ) {
-		return $owner_id;
+		return absint( $owner_id );
 	}
 }
 

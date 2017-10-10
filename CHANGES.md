@@ -4,6 +4,8 @@
 * add customizer background color to login screen.
 * add some subscription helper functions.
 * add shortcodes for family profile display.
+* add styles.
+* add custom templates for profile fields.
 
 #### 1.6.3 / 2017-10-6
 * add custom-logo for login/lost-password page.

@@ -40,6 +40,27 @@ final class SmcsFunctions {
 	public $uri;
 
 	/**
+	 * Returns the instance.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return object
+	 */
+	public static function get_instance() {
+
+		static $instance = null;
+
+		if ( is_null( $instance ) ) {
+			$instance = new self;
+			$instance->setup();
+			$instance->includes();
+			$instance->setup_actions();
+		}
+
+		return $instance;
+	}
+
+	/**
 	 * Plugin setup.
 	 *
 	 * @since  1.0.0
@@ -90,6 +111,7 @@ final class SmcsFunctions {
 	 */
 	private function setup_actions() {
 		register_activation_hook( __FILE__, array( $this, 'activation' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'smcs_functions_scripts' ) );
 	}
 
 	/**
@@ -104,24 +126,14 @@ final class SmcsFunctions {
 	}
 
 	/**
-	 * Returns the instance.
+	 * Loads the front end scripts and styles.  No styles are loaded if the theme supports the plugin.
 	 *
 	 * @since  1.0.0
 	 * @access public
-	 * @return object
+	 * @return void
 	 */
-	public static function get_instance() {
-
-		static $instance = null;
-
-		if ( is_null( $instance ) ) {
-			$instance = new self;
-			$instance->setup();
-			$instance->includes();
-			$instance->setup_actions();
-		}
-
-		return $instance;
+	public function smcs_functions_scripts() {
+			wp_register_style( 'smcs', $this->uri . 'css/smcs.css' );
 	}
 }
 

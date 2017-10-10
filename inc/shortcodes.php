@@ -10,37 +10,26 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
 	// Add the `[sm_students]` shortcode.
 	add_shortcode( 'sm_students', 'sm_students_shortcode' );
-	// Add the `[sm_parent]` shortcode.
+	// Add the `[sm_parent parent="2"]` shortcode.
 	add_shortcode( 'sm_parent', 'sm_parent_shortcode' );
-	// Add the `[sm_family_name]` shortcode.
-	add_shortcode( 'sm_family_name', 'sm_family_name_shortcode' );
+	// Add the `[sm_parents]` shortcode.
+	add_shortcode( 'sm_parents', 'sm_parents_shortcode' );
+	// Add the `[sm_home_info]` shortcode.
+	add_shortcode( 'sm_home_info', 'sm_home_info_shortcode' );
 	// Add the `[sm_home_phone]` shortcode.
 	add_shortcode( 'sm_home_phone', 'sm_home_phone_shortcode' );
 }
 
-function sm_family_name_shortcode( $atts ) {
-
-	$atts = shortcode_atts(
-		array(
-			'wrapper' => 'h3',
-			'class'   => 'sm-family-name',
-		),
-		$atts,
-		'sm_family_name'
-	);
-
-	$user_id = sm_get_group_owner_id();
-	$sm_family = rcpga_group_accounts()->members->get_group_name( $user_id );
-	$sm_family_name = '';
+function sm_home_info_shortcode() {
+	$account_creater_id = sm_get_group_owner_id();
+	$sm_family = rcpga_group_accounts()->members->get_group_name( $account_creater_id );
+	$sm_home_info = '';
 
 	if ( $sm_family ) {
-		$sm_family_name .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
-		$sm_family_name .= "{$sm_family}";
-		$sm_family_name .= '</' . $atts['wrapper'] . '>';
+		$sm_home_info .= sm_get_template_part( 'family-home-info' );
 	}
 
-	return $sm_family_name;
-
+	return $sm_home_info;
 }
 
 function sm_home_phone_shortcode( $atts ) {
@@ -60,7 +49,7 @@ function sm_home_phone_shortcode( $atts ) {
 
 	if ( $sm_phone ) {
 		$sm_home_phone .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
-		$sm_home_phone .= "{$sm_phone}";
+		$sm_home_phone .= $sm_phone;
 		$sm_home_phone .= '</' . $atts['wrapper'] . '>';
 	}
 
@@ -94,23 +83,14 @@ function sm_address_shortcode( $atts ) {
 
 function sm_students_shortcode( $atts ) {
 
-	$atts = shortcode_atts(
-		array(
-			'wrapper' => 'div',
-			'class'   => 'sm-students',
-		),
-		$atts,
-		'sm_students'
-	);
-
-	$user_id = sm_get_group_owner_id();
-
+	$account_creater_id = sm_get_group_owner_id();
 	$sm_students = '';
 
 	if ( sm_get_students( $user_id ) ) {
-		$sm_students .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
-		$sm_students .= sm_get_students( $user_id );
-		$sm_students .= '</' . $atts['wrapper'] . '>';
+
+		if ( sm_get_parent( $account_creater_id ) ) {
+			$sm_students = sm_get_template_part( 'family-students' );
+		}
 	}
 
 	return $sm_students;
@@ -128,36 +108,31 @@ function sm_parent_shortcode( $atts ) {
 		'sm_parent'
 	);
 
-	$user_id = sm_get_group_owner_id();
+	$account_creater_id = sm_get_group_owner_id();
 	$p_number = $atts['parent'];
 
 	$sm_parent = '';
 
-	if ( sm_get_parent( $user_id, $p_number ) ) {
+	if ( sm_get_parent( $account_creater_id, $p_number ) ) {
 		$sm_parent .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
-		$sm_parent .= sm_get_parent( $user_id, $p_number );
+		$sm_parent .= sm_get_parent( $account_creater_id, $p_number );
 		$sm_parent .= '</' . $atts['wrapper'] . '>';
 	}
 
 	return $sm_parent;
 }
 
-// Add Shortcode
-function sm_group_meta_shortcode( $atts ) {
+function sm_parents_shortcode() {
 
-	// Attributes
-	$atts = shortcode_atts(
-		array(
-			'key'     => 'first_name',
-			'wrapper' => 'div',
-			'class'   => 'sm-group-data',
-		),
-		$atts,
-		'sm_group_meta'
-	);
+	$account_creater_id = sm_get_group_owner_id();
+	$sm_parents = '';
 
+	if ( sm_get_parent( $account_creater_id ) ) {
+		$sm_parents = sm_get_template_part( 'family-parents' );
+	}
+
+	return $sm_parents;
 }
-add_shortcode( 'sm_group_meta', 'sm_group_meta_shortcode' );
 
 // Login-form shortcode with redirect.
 function sm_login_form_shortcode() {
