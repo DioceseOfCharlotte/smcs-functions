@@ -21,6 +21,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 == Changelog ==
 #### [unreleased]
 
+#### 1.6.6 / 2017-10-11
+* link to family dashboard after profile update.
+
 #### 1.6.5 / 2017-10-10
 * add profile edit functions.
 
