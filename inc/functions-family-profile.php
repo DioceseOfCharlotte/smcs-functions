@@ -4,9 +4,9 @@ function sm_get_address( $user_id ) {
 
 	$user_id = sm_get_group_owner_id();
 
-	$sm_street = get_user_meta( $user_id, 'sm_home_street', true );
-	$sm_city = get_user_meta( $user_id, 'sm_home_city', true );
-	$sm_state = get_user_meta( $user_id, 'sm_home_state', true );
+	$sm_street   = get_user_meta( $user_id, 'sm_home_street', true );
+	$sm_city     = get_user_meta( $user_id, 'sm_home_city', true );
+	$sm_state    = get_user_meta( $user_id, 'sm_home_state', true );
 	$sm_home_zip = get_user_meta( $user_id, 'sm_home_zip', true );
 
 	$address = '';
@@ -24,19 +24,19 @@ function sm_get_students( $user_id ) {
 	$user_id = sm_get_group_owner_id();
 
 	$s_1_first = get_user_meta( $user_id, 'sm_student_1_first', true );
-	$s_1_last = get_user_meta( $user_id, 'sm_student_1_last', true );
+	$s_1_last  = get_user_meta( $user_id, 'sm_student_1_last', true );
 	$s_1_grade = get_user_meta( $user_id, 'sm_student_1_grade', true );
 	$s_2_first = get_user_meta( $user_id, 'sm_student_2_first', true );
-	$s_2_last = get_user_meta( $user_id, 'sm_student_2_last', true );
+	$s_2_last  = get_user_meta( $user_id, 'sm_student_2_last', true );
 	$s_2_grade = get_user_meta( $user_id, 'sm_student_2_grade', true );
 	$s_3_first = get_user_meta( $user_id, 'sm_student_3_first', true );
-	$s_3_last = get_user_meta( $user_id, 'sm_student_3_last', true );
+	$s_3_last  = get_user_meta( $user_id, 'sm_student_3_last', true );
 	$s_3_grade = get_user_meta( $user_id, 'sm_student_3_grade', true );
 	$s_4_first = get_user_meta( $user_id, 'sm_student_4_first', true );
-	$s_4_last = get_user_meta( $user_id, 'sm_student_4_last', true );
+	$s_4_last  = get_user_meta( $user_id, 'sm_student_4_last', true );
 	$s_4_grade = get_user_meta( $user_id, 'sm_student_4_grade', true );
 	$s_5_first = get_user_meta( $user_id, 'sm_student_5_first', true );
-	$s_5_last = get_user_meta( $user_id, 'sm_student_5_last', true );
+	$s_5_last  = get_user_meta( $user_id, 'sm_student_5_last', true );
 	$s_5_grade = get_user_meta( $user_id, 'sm_student_5_grade', true );
 
 	$students = '';
@@ -44,23 +44,23 @@ function sm_get_students( $user_id ) {
 	if ( $s_1_first ) {
 		$students = array(
 			's1' => array(
-				'name' => $s_1_first . ' ' . $s_1_last,
+				'name'  => $s_1_first . ' ' . $s_1_last,
 				'grade' => $s_1_grade,
 			),
 			's2' => array(
-				'name' => $s_2_first . ' ' . $s_2_last,
+				'name'  => $s_2_first . ' ' . $s_2_last,
 				'grade' => $s_2_grade,
 			),
 			's3' => array(
-				'name' => $s_3_first . ' ' . $s_3_last,
+				'name'  => $s_3_first . ' ' . $s_3_last,
 				'grade' => $s_3_grade,
 			),
 			's4' => array(
-				'name' => $s_4_first . ' ' . $s_4_last,
+				'name'  => $s_4_first . ' ' . $s_4_last,
 				'grade' => $s_4_grade,
 			),
 			's5' => array(
-				'name' => $s_5_first . ' ' . $s_5_last,
+				'name'  => $s_5_first . ' ' . $s_5_last,
 				'grade' => $s_5_grade,
 			),
 		);
@@ -71,16 +71,17 @@ function sm_get_students( $user_id ) {
 
 function sm_get_parent( $account_creater_id, $p_number = '1' ) {
 	$account_creater_id = sm_get_group_owner_id();
-	$user_info = get_userdata( $account_creater_id );
+	$user_info          = get_userdata( $account_creater_id );
 
 	$sm_first = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_first", true );
-	$sm_last = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_last", true );
+	$sm_last  = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_last", true );
 	$sm_email = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_email", true );
 	$sm_phone = get_user_meta( $account_creater_id, "sm_parent_{$p_number}_phone", true );
 
 	if ( '1' == $p_number && ! empty( $user_info ) ) {
-		$sm_first = $user_info->first_name;;
-		$sm_last = $user_info->last_name;
+		$sm_first = $user_info->first_name;
+		;
+		$sm_last  = $user_info->last_name;
 		$sm_email = $user_info->user_email;
 	}
 
@@ -99,7 +100,7 @@ function sm_get_parent( $account_creater_id, $p_number = '1' ) {
 
 function sm_get_template_part( $slug ) {
 
-	$template = smcs_functions()->dir . "templates/{$slug}.php";
+	$template       = smcs_functions()->dir . "templates/{$slug}.php";
 	$theme_template = locate_template( array( "smcs/{$slug}.php" ) );
 
 	if ( $theme_template ) {
@@ -116,8 +117,8 @@ function sm_get_template_part( $slug ) {
 
 function has_user_account() {
 	$account_creater_id = sm_get_group_owner_id();
-	$parent_2_email = get_user_meta( $account_creater_id, 'sm_parent_2_email', true );
-	$member_user    = get_user_by( 'email', $parent_2_email );
+	$parent_2_email     = get_user_meta( $account_creater_id, 'sm_parent_2_email', true );
+	$member_user        = get_user_by( 'email', $parent_2_email );
 
 	if ( $member_user ) {
 		$member_user_id = $member_user->ID;

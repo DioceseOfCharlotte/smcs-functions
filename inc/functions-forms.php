@@ -96,6 +96,8 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 		// 	$args['user_login'] = $args['user_email'];
 		// }
 
+
+
 		// create a new user if member does not already exist
 		if ( $member_user = get_user_by( 'email', $member_email ) ) {
 			$member_user_id = $member_user->ID;
@@ -121,6 +123,27 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 
 	update_user_meta( $user_id, 'sm_group_id', $group_id );
 }
+
+
+
+
+add_action( 'gform_post_update_entry_40', 'sm_update_family_admin', 10, 2 );
+function sm_update_family_admin( $entry, $form ) {
+	$member_user = sm_get_group_admin();
+
+	$member_userdata = array(
+		'ID'         => $member_user,
+		'user_email' => $entry['3'],
+		'first_name' => $entry['4.3'],
+		'last_name'  => $entry['4.6'],
+	);
+
+	wp_update_user( $member_userdata );
+}
+
+
+
+
 
 // dynamically populate a GF field with the RPC subscription ID.
 function sm_subscription_populate( $value ) {

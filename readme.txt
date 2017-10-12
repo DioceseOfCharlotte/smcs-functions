@@ -19,7 +19,6 @@ Functions for altering or adding to the default behavior of various plugins on t
 1. Logo
 
 == Changelog ==
-#### [unreleased]
 
 #### 1.6.6 / 2017-10-11
 * link to family dashboard after profile update.

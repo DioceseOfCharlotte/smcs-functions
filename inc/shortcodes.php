@@ -22,8 +22,8 @@ function smcs_register_shortcodes() {
 
 function sm_home_info_shortcode() {
 	$account_creater_id = sm_get_group_owner_id();
-	$sm_family = rcpga_group_accounts()->members->get_group_name( $account_creater_id );
-	$sm_home_info = '';
+	$sm_family          = rcpga_group_accounts()->members->get_group_name( $account_creater_id );
+	$sm_home_info       = '';
 
 	if ( $sm_family ) {
 		$sm_home_info .= sm_get_template_part( 'family-home-info' );
@@ -43,9 +43,9 @@ function sm_home_phone_shortcode( $atts ) {
 		'sm_home_phone'
 	);
 
-	$user_id = sm_get_group_owner_id();
-	$sm_phone = get_user_meta( $user_id, 'sm_home_phone', true );
-	$sm_home_phone = '';
+	$account_creater_id = sm_get_group_owner_id();
+	$sm_phone           = get_user_meta( $account_creater_id, 'sm_home_phone', true );
+	$sm_home_phone      = '';
 
 	if ( $sm_phone ) {
 		$sm_home_phone .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
@@ -68,13 +68,13 @@ function sm_address_shortcode( $atts ) {
 		'sm_address'
 	);
 
-	$user_id = sm_get_group_owner_id();
+	$account_creater_id = sm_get_group_owner_id();
 
 	$sm_address = '';
 
-	if ( sm_get_address( $user_id ) ) {
+	if ( sm_get_address( $account_creater_id ) ) {
 		$sm_address .= '<' . $atts['wrapper'] . ' class="' . $atts['class'] . '">';
-		$sm_address .= sm_get_address( $user_id );
+		$sm_address .= sm_get_address( $account_creater_id );
 		$sm_address .= '</' . $atts['wrapper'] . '>';
 	}
 
@@ -84,9 +84,9 @@ function sm_address_shortcode( $atts ) {
 function sm_students_shortcode( $atts ) {
 
 	$account_creater_id = sm_get_group_owner_id();
-	$sm_students = '';
+	$sm_students        = '';
 
-	if ( sm_get_students( $user_id ) ) {
+	if ( sm_get_students( $account_creater_id ) ) {
 
 		if ( sm_get_parent( $account_creater_id ) ) {
 			$sm_students = sm_get_template_part( 'family-students' );
@@ -109,7 +109,7 @@ function sm_parent_shortcode( $atts ) {
 	);
 
 	$account_creater_id = sm_get_group_owner_id();
-	$p_number = $atts['parent'];
+	$p_number           = $atts['parent'];
 
 	$sm_parent = '';
 
@@ -125,7 +125,7 @@ function sm_parent_shortcode( $atts ) {
 function sm_parents_shortcode() {
 
 	$account_creater_id = sm_get_group_owner_id();
-	$sm_parents = '';
+	$sm_parents         = '';
 
 	if ( sm_get_parent( $account_creater_id ) ) {
 		$sm_parents = sm_get_template_part( 'family-parents' );
@@ -137,7 +137,7 @@ function sm_parents_shortcode() {
 // Login-form shortcode with redirect.
 function sm_login_form_shortcode() {
 
-	$logoutlink = wp_logout_url( home_url() );
+	$logoutlink    = wp_logout_url( home_url() );
 	$passresetlink = wp_lostpassword_url();
 
 	if ( is_user_logged_in() ) {
@@ -145,7 +145,7 @@ function sm_login_form_shortcode() {
 	}
 
 	$user = wp_get_current_user();
-	$url = home_url( 'parent-home' );
+	$url  = home_url( 'parent-home' );
 
 	if ( isset( $user->roles ) && is_array( $user->roles ) ) {
 		// athletics admins

@@ -1,6 +1,7 @@
 # Change Log
 
 #### [unreleased]
+* group owner can edit group admin through GF.
 
 #### 1.6.6 / 2017-10-11
 * link to family dashboard after profile update.
