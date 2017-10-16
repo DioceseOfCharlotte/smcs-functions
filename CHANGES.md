@@ -1,6 +1,9 @@
 # Change Log
 
 #### [unreleased]
+
+#### 1.6.7 / 2017-10-15
+* group admin can view group owners entries and vice versa.
 * group owner can edit group admin through GF.
 
 #### 1.6.6 / 2017-10-11
