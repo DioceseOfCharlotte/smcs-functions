@@ -119,3 +119,7 @@ p:last-child {
     text-align: right;
 	font-size: 0.9rem;
 }
+
+body.gravityview-template-smcs-form .post-content {
+	max-width: 100%;
+}
