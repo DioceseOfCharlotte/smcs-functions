@@ -20,11 +20,12 @@ function sm_edit_gv_cancel_link( $back_link, $form, $entry, $view_id ) {
 
 
 function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
-	if ( ! rcpga_group_accounts()->members->get_group_id() ) {
-		return;
-	}
 
 	if ( '40' == $form['id'] ) {
+
+		if ( ! rcpga_group_accounts()->members->get_group_id() ) {
+			return;
+		}
 
 		$member_user = sm_get_group_admin();
 
@@ -43,7 +44,7 @@ function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
 
 
 add_filter( 'gravityview_search_criteria', 'sm_created_by_group', 10, 1 );
-function sm_created_by_group( $entries, $criteria ) {
+function sm_created_by_group( $criteria ) {
 
 	$gv_ids = array(
 		'1814',
@@ -55,34 +56,33 @@ function sm_created_by_group( $entries, $criteria ) {
 		'1727',
 	);
 
-	if ( function_exists( 'gravityview_get_view_id' ) && ! in_array( gravityview_get_view_id(), $gv_ids ) ) {
-		return $criteria;
-	}
+	if ( function_exists( 'gravityview_get_view_id' ) && in_array( gravityview_get_view_id(), $gv_ids ) ) {
 
-	$user_id       = get_current_user_id();
-	$group_id      = rcpga_group_accounts()->members->get_group_id( $user_id );
-	$group_members = rcpga_group_accounts()->members->get_members( $group_id );
+		$user_id       = get_current_user_id();
+		$group_id      = rcpga_group_accounts()->members->get_group_id( $user_id );
+		$group_members = rcpga_group_accounts()->members->get_members( $group_id );
 
-	$members = array();
+		$members = array();
 
-	if ( $group_members ) {
-		foreach ( $group_members as $member ) {
-			$members[] = $member->user_id;
+		if ( $group_members ) {
+			foreach ( $group_members as $member ) {
+				$members[] = $member->user_id;
+			}
 		}
-	}
 
-	$creators = $group_id ? $members : $user_id;
+		$creators = $group_id ? $members : $user_id;
 
-	$criteria['search_criteria'] = array(
-		'field_filters' => array(
-			array(
-				'key'      => 'created_by',
-				'operator' => 'is',
-				'value'    => $creators,
+		$criteria['search_criteria'] = array(
+			'field_filters' => array(
+				array(
+					'key'      => 'created_by',
+					'operator' => 'is',
+					'value'    => $creators,
+				),
+				'mode' => 'any',
 			),
-			'mode' => 'any',
-		),
-	);
+		);
+	}
 
 	return $criteria;
 }

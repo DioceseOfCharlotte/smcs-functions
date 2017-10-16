@@ -6,6 +6,8 @@ add_action( 'init', 'smcs_register_shortcodes' );
 function smcs_register_shortcodes() {
 	// Add the `[sm_login_form]` shortcode.
 	add_shortcode( 'sm_login_form', 'sm_login_form_shortcode' );
+	// Add the `[sm_group_name]` shortcode.
+	add_shortcode( 'sm_group_name', 'sm_group_name_shortcode' );
 	// Add the `[sm_address]` shortcode.
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
 	// Add the `[sm_students]` shortcode.
@@ -18,6 +20,13 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_home_info', 'sm_home_info_shortcode' );
 	// Add the `[sm_home_phone]` shortcode.
 	add_shortcode( 'sm_home_phone', 'sm_home_phone_shortcode' );
+}
+
+function sm_group_name_shortcode() {
+	$account_creater_id = sm_get_group_owner_id();
+	$sm_family          = rcpga_group_accounts()->members->get_group_name( $account_creater_id );
+
+	return $sm_family;
 }
 
 function sm_home_info_shortcode() {

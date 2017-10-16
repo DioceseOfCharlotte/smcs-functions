@@ -55,7 +55,7 @@ p:last-child {
 	margin-bottom: 0;
 }
 
-.gv-list-view.gv-no-results {
+.gv-container .gv-list-view.gv-no-results {
     display: none;
 }
 
@@ -73,4 +73,49 @@ p:last-child {
 
 .sm-parent > div {
     margin-bottom: 0.5rem;
+}
+
+.postid-1496 .gv-list-view {
+    max-width: 100%;
+}
+
+/*.gv-container.gv-container-no-results {
+    display: none;
+}*/
+
+.gv-list-view-content p {
+    margin: 0;
+}
+
+.postid-1496 .gv-list-view-content {
+    padding: 0;
+}
+
+
+.smcs-post .alert {
+    padding: 0.5rem 1rem;
+	line-height: 1.3;
+    margin-bottom: 1rem;
+	border-width: 0;
+    border-left: 5px solid currentColor;
+    border-radius: 0 2px 2px 0;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.smcs-post .alert-info {
+    color: #004085;
+    background-color: #fff;
+    padding-left: 1.5rem;
+}
+
+.alert .subtext,
+.alert small {
+    color: #868e96;
+    font-style: normal;
+    font-size: .8rem;
+}
+
+.gv-field-40-edit_link {
+    text-align: right;
+	font-size: 0.9rem;
 }

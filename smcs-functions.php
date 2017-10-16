@@ -3,7 +3,7 @@
  * Plugin Name:       SMCS Functions
  * Plugin URI:        https://github.com/DioceseOfCharlotte/smcs-functions
  * Description:       Functions for altering or adding to the default behavior of various plugins on the SMCS site.
- * Version:           1.6.7
+ * Version:           1.6.8
  * Author:            Marty Helmick
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
@@ -134,7 +134,10 @@ final class SmcsFunctions {
 	 * @return void
 	 */
 	public function smcs_functions_scripts() {
-			wp_register_style( 'smcs', $this->uri . 'css/smcs.css' );
+		wp_register_style( 'smcs', $this->uri . 'css/smcs.css' );
+		if ( is_singular( array( 'registration_pages', 'smcs_athletics', 'gravityview' ) ) ) {
+			wp_enqueue_style( 'smcs' );
+		}
 	}
 }
 

@@ -20,6 +20,10 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 == Changelog ==
 
+#### 1.6.8 / 2017-10-16
+* add group name shortcode.
+* load css on all form pages.
+
 #### 1.6.7 / 2017-10-15
 * group admin can view group owners entries and vice versa.
 * group owner can edit group admin through GF.
