@@ -1,40 +1,26 @@
 <?php
 
-
 add_filter( 'gravityview/edit_entry/success', 'sm_edit_gv_entry_success', 10, 4 );
 add_filter( 'gravityview/edit_entry/cancel_link', 'sm_edit_gv_cancel_link', 10, 4 );
 add_action( 'gravityview/edit_entry/after_update', 'sm_update_family_admin', 10, 3 );
 add_filter( 'gravityview_search_criteria', 'sm_created_by_group', 10, 1 );
-//add_filter( 'rcpga-group-status-message', 'sm_group_status_message' );
 add_filter( 'user_has_cap', 'admin_edit_owner_gv', 10, 3 );
-
-function sm_group_status_message() {
-	$user_id     = get_current_user_id();
-	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
-	$total_seats = rcpga_group_accounts()->groups->get_seats_count( $group_id );
-	$used_seats  = rcpga_group_accounts()->groups->get_member_count( $group_id );
-
-	return sprintf( '<p>' . __( 'You are currently using %s out of %s Family Accounts for the website.', 'rcp-group-accounts' ) . '</p>', esc_html( $used_seats ), esc_html( $total_seats ) );
-}
 
 function sm_edit_gv_entry_success( $message, $view_id, $entry, $back_link ) {
 
 	if ( is_single( '1496' ) ) {
-		return $message;
+		$back_link = home_url( 'accounts/family-dashboard/' );
+		$message   = 'Profile Updated. <a href="' . $back_link . '">Return to your Family Dashboard.</a>';
 	}
-
-	$back_link = home_url( 'accounts/family-dashboard/' );
-	$message   = 'Profile Updated. <a href="' . $back_link . '">Return to your Family Dashboard.</a>';
 	return $message;
 }
 
 function sm_edit_gv_cancel_link( $back_link, $form, $entry, $view_id ) {
 
-	if ( ! is_single( '1496' ) ) {
-		return $back_link;
+	if ( is_single( '1496' ) ) {
+		$back_link = home_url( 'accounts/family-dashboard/' );
 	}
 
-	$back_link = home_url( 'accounts/family-dashboard/' );
 	return $back_link;
 }
 
