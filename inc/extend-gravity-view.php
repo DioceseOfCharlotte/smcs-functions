@@ -4,15 +4,36 @@
 add_filter( 'gravityview/edit_entry/success', 'sm_edit_gv_entry_success', 10, 4 );
 add_filter( 'gravityview/edit_entry/cancel_link', 'sm_edit_gv_cancel_link', 10, 4 );
 add_action( 'gravityview/edit_entry/after_update', 'sm_update_family_admin', 10, 3 );
+add_filter( 'gravityview_search_criteria', 'sm_created_by_group', 10, 1 );
+//add_filter( 'rcpga-group-status-message', 'sm_group_status_message' );
+add_filter( 'user_has_cap', 'admin_edit_owner_gv', 10, 3 );
 
+function sm_group_status_message() {
+	$user_id     = get_current_user_id();
+	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$total_seats = rcpga_group_accounts()->groups->get_seats_count( $group_id );
+	$used_seats  = rcpga_group_accounts()->groups->get_member_count( $group_id );
 
-function sm_edit_gv_entry_success( $entry_updated_message, $view_id, $entry, $back_link ) {
+	return sprintf( '<p>' . __( 'You are currently using %s out of %s Family Accounts for the website.', 'rcp-group-accounts' ) . '</p>', esc_html( $used_seats ), esc_html( $total_seats ) );
+}
+
+function sm_edit_gv_entry_success( $message, $view_id, $entry, $back_link ) {
+
+	if ( is_single( '1496' ) ) {
+		return $message;
+	}
+
 	$back_link = home_url( 'accounts/family-dashboard/' );
 	$message   = 'Profile Updated. <a href="' . $back_link . '">Return to your Family Dashboard.</a>';
 	return $message;
 }
 
 function sm_edit_gv_cancel_link( $back_link, $form, $entry, $view_id ) {
+
+	if ( ! is_single( '1496' ) ) {
+		return $back_link;
+	}
+
 	$back_link = home_url( 'accounts/family-dashboard/' );
 	return $back_link;
 }
@@ -42,8 +63,6 @@ function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
 
 }
 
-
-add_filter( 'gravityview_search_criteria', 'sm_created_by_group', 10, 1 );
 function sm_created_by_group( $criteria ) {
 
 	$gv_ids = array(
@@ -56,33 +75,60 @@ function sm_created_by_group( $criteria ) {
 		'1727',
 	);
 
-	if ( function_exists( 'gravityview_get_view_id' ) && in_array( gravityview_get_view_id(), $gv_ids ) ) {
-
-		$user_id       = get_current_user_id();
-		$group_id      = rcpga_group_accounts()->members->get_group_id( $user_id );
-		$group_members = rcpga_group_accounts()->members->get_members( $group_id );
-
-		$members = array();
-
-		if ( $group_members ) {
-			foreach ( $group_members as $member ) {
-				$members[] = $member->user_id;
-			}
-		}
-
-		$creators = $group_id ? $members : $user_id;
-
-		$criteria['search_criteria'] = array(
-			'field_filters' => array(
-				array(
-					'key'      => 'created_by',
-					'operator' => 'is',
-					'value'    => $creators,
-				),
-				'mode' => 'any',
-			),
-		);
+	if ( ! is_single( '1496' ) ) {
+		return $criteria;
 	}
 
+	if ( function_exists( 'gravityview_get_view_id' ) && ! in_array( gravityview_get_view_id(), $gv_ids ) ) {
+		return $criteria;
+	}
+
+	$user_id       = get_current_user_id();
+	$group_id      = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$group_members = rcpga_group_accounts()->members->get_members( $group_id );
+
+	$members = array();
+
+	if ( $group_members ) {
+		foreach ( $group_members as $member ) {
+			$members[] = $member->user_id;
+		}
+	}
+
+	$creators = $group_id ? $members : $user_id;
+
+	$criteria['search_criteria'] = array(
+		'field_filters' => array(
+			array(
+				'key'      => 'created_by',
+				'operator' => 'is',
+				'value'    => $creators,
+			),
+			'mode' => 'any',
+		),
+	);
+
 	return $criteria;
+}
+
+function admin_edit_owner_gv( $allcaps, $cap, $args ) {
+	// Bail out if we're not asking about a post:
+	if ( 'edit_post' === $cap || 'edit_page' === $cap ) {
+		return $allcaps;
+	}
+
+	global $post;
+	$allowed_ids = array( 1496 );
+	$post_id     = isset( $post ) ? $post->ID : false;
+	if ( ! in_array( $post_id, $allowed_ids ) ) {
+		return $allcaps;
+	}
+
+	if ( ! rcpga_group_accounts()->members->get_group_id() ) {
+		return $allcaps;
+	}
+
+	$allcaps['gravityview_edit_others_entries'] = true;
+
+	return $allcaps;
 }

@@ -2,6 +2,9 @@
 
 #### [unreleased]
 
+#### 1.6.9 / 2017-10-18
+* allow group admin to edit group owner accounts.
+
 #### 1.6.8 / 2017-10-16
 * add group name shortcode.
 * load css on all form pages.

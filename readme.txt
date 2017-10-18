@@ -20,6 +20,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 == Changelog ==
 
+#### 1.6.9 / 2017-10-18
+* allow group admin to edit group owner accounts.
+
 #### 1.6.8 / 2017-10-16
 * add group name shortcode.
 * load css on all form pages.
