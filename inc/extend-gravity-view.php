@@ -6,9 +6,27 @@ add_action( 'gravityview/edit_entry/after_update', 'sm_update_family_admin', 10,
 add_filter( 'gravityview_search_criteria', 'sm_created_by_group', 10, 1 );
 add_filter( 'user_has_cap', 'admin_edit_owner_gv', 10, 3 );
 
+function sm_is_profile_view() {
+	return function_exists( 'gravityview_get_view_id' ) && in_array( gravityview_get_view_id(), sm_get_profile_views() );
+}
+
+function sm_get_profile_views() {
+	$gv_ids = array(
+		'1854',
+		'1814',
+		'1812',
+		'1795',
+		'1732',
+		'1731',
+		'1730',
+		'1727',
+	);
+	return $gv_ids;
+}
+
 function sm_edit_gv_entry_success( $message, $view_id, $entry, $back_link ) {
 
-	if ( is_single( '1496' ) ) {
+	if ( sm_is_profile_view() ) {
 		$back_link = home_url( 'accounts/family-dashboard/' );
 		$message   = 'Profile Updated. <a href="' . $back_link . '">Return to your Family Dashboard.</a>';
 	}
@@ -17,7 +35,7 @@ function sm_edit_gv_entry_success( $message, $view_id, $entry, $back_link ) {
 
 function sm_edit_gv_cancel_link( $back_link, $form, $entry, $view_id ) {
 
-	if ( is_single( '1496' ) ) {
+	if ( sm_is_profile_view() ) {
 		$back_link = home_url( 'accounts/family-dashboard/' );
 	}
 
@@ -51,22 +69,7 @@ function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
 
 function sm_created_by_group( $criteria ) {
 
-	$gv_ids = array(
-		'1854',
-		'1814',
-		'1812',
-		'1795',
-		'1732',
-		'1731',
-		'1730',
-		'1727',
-	);
-
-	// if ( ! is_single( '1496' ) ) {
-	// 	return $criteria;
-	// }
-
-	if ( function_exists( 'gravityview_get_view_id' ) && ! in_array( gravityview_get_view_id(), $gv_ids ) ) {
+	if ( ! sm_is_profile_view() ) {
 		return $criteria;
 	}
 
@@ -101,6 +104,10 @@ function sm_created_by_group( $criteria ) {
 function admin_edit_owner_gv( $allcaps, $cap, $args ) {
 	// Bail out if we're not asking about a post:
 	if ( 'edit_post' === $cap || 'edit_page' === $cap ) {
+		return $allcaps;
+	}
+
+	if ( ! sm_is_profile_view() ) {
 		return $allcaps;
 	}
 
