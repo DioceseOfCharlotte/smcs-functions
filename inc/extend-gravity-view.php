@@ -52,6 +52,7 @@ function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
 function sm_created_by_group( $criteria ) {
 
 	$gv_ids = array(
+		'1854',
 		'1814',
 		'1812',
 		'1795',
@@ -61,9 +62,9 @@ function sm_created_by_group( $criteria ) {
 		'1727',
 	);
 
-	if ( ! is_single( '1496' ) ) {
-		return $criteria;
-	}
+	// if ( ! is_single( '1496' ) ) {
+	// 	return $criteria;
+	// }
 
 	if ( function_exists( 'gravityview_get_view_id' ) && ! in_array( gravityview_get_view_id(), $gv_ids ) ) {
 		return $criteria;

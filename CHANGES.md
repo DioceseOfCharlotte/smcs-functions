@@ -1,6 +1,7 @@
 # Change Log
 
-#### [unreleased]
+#### 1.7.0 / 2017-10-19
+* Add shortcodes for group expiration and subscription check.
 
 #### 1.6.9 / 2017-10-18
 * allow group admin to edit group owner accounts.

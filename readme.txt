@@ -20,6 +20,11 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 == Changelog ==
 
+#### [unreleased]
+
+#### 1.7.0 / 2017-10-19
+* Add shortcodes for group expiration and subscription check.
+
 #### 1.6.9 / 2017-10-18
 * allow group admin to edit group owner accounts.
 

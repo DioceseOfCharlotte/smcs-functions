@@ -24,6 +24,22 @@ function sm_get_group_admin() {
 	}
 }
 
+function sm_get_group_expiration( $id = 0 ) {
+	if ( ! function_exists( 'rcp_hardset_expiration_dates_load' ) ) {
+		return false;
+	}
+	global $rcp_hsed;
+	$id = $id ? $id : sm_get_group_subscription_id();
+
+	$date = '';
+
+	if ( $id ) {
+		$date = date_create( $rcp_hsed->get_subscription_expiration_date( $id ) );
+	}
+
+	return date_format( $date, 'F d, Y' );
+}
+
 function sm_get_group_subscription_id() {
 	$user_id = get_current_user_id();
 

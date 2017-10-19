@@ -6,8 +6,12 @@ add_action( 'init', 'smcs_register_shortcodes' );
 function smcs_register_shortcodes() {
 	// Add the `[sm_login_form]` shortcode.
 	add_shortcode( 'sm_login_form', 'sm_login_form_shortcode' );
+	// Add the `[sm_group_expiration id="2"]` shortcode.
+	add_shortcode( 'sm_group_expiration', 'sm_group_expiration_shortcode' );
 	// Add the `[sm_group_name]` shortcode.
 	add_shortcode( 'sm_group_name', 'sm_group_name_shortcode' );
+	// Add the `[sm_has_subscription id="2"]` shortcode.
+	add_shortcode( 'sm_has_subscription', 'sm_has_subscription_shortcode' );
 	// Add the `[sm_address]` shortcode.
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
 	// Add the `[sm_students]` shortcode.
@@ -27,6 +31,42 @@ function sm_group_name_shortcode() {
 	$sm_family          = rcpga_group_accounts()->members->get_group_name( $account_creater_id );
 
 	return $sm_family;
+}
+
+function sm_group_expiration_shortcode( $atts ) {
+
+	// Attributes
+	$atts = shortcode_atts(
+		array(
+			'id' => '',
+		),
+		$atts,
+		'sm_group_expiration'
+	);
+
+	return sm_get_group_expiration( $atts['id'] );
+
+}
+
+function sm_has_subscription_shortcode( $atts, $content = null ) {
+
+	// Attributes
+	$atts = shortcode_atts(
+		array(
+			'id' => '',
+		),
+		$atts,
+		'sm_has_subscription'
+	);
+
+	if ( $atts['id'] ) {
+		if ( sm_get_group_subscription_id() == $atts['id'] ) {
+			return do_shortcode( $content );
+		};
+	} elseif ( sm_get_group_subscription_id() ) {
+		return do_shortcode( $content );
+	}
+
 }
 
 function sm_home_info_shortcode() {
