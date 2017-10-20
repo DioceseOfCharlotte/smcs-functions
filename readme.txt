@@ -21,6 +21,8 @@ Functions for altering or adding to the default behavior of various plugins on t
 == Changelog ==
 
 #### [unreleased]
+
+#### 1.7.1 / 2017-10-20
 * change backlink on profile single gviews.
 
 #### 1.7.0 / 2017-10-19

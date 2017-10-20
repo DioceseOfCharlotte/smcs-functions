@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.1 / 2017-10-20
+* change backlink on profile single gviews.
+
 #### 1.7.0 / 2017-10-19
 * Add shortcodes for group expiration and subscription check.
 
