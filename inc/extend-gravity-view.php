@@ -6,6 +6,8 @@ add_action( 'gravityview/edit_entry/after_update', 'sm_update_family_admin', 10,
 add_filter( 'gravityview_search_criteria', 'sm_created_by_group', 10, 1 );
 add_filter( 'user_has_cap', 'admin_edit_owner_gv', 10, 3 );
 
+add_filter( 'gravityview_go_back_url', 'sm_back_link', 10, 1 );
+
 function sm_is_profile_view() {
 	return function_exists( 'gravityview_get_view_id' ) && in_array( gravityview_get_view_id(), sm_get_profile_views() );
 }
@@ -42,6 +44,14 @@ function sm_edit_gv_cancel_link( $back_link, $form, $entry, $view_id ) {
 	return $back_link;
 }
 
+function sm_back_link( $back_link ) {
+
+	if ( sm_is_profile_view() ) {
+		$back_link = home_url( 'accounts/family-dashboard/' );
+	}
+
+	return $back_link;
+}
 
 
 function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
