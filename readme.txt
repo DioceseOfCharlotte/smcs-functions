@@ -21,6 +21,7 @@ Functions for altering or adding to the default behavior of various plugins on t
 == Changelog ==
 
 #### [unreleased]
+* change backlink on profile single gviews.
 
 #### 1.7.0 / 2017-10-19
 * Add shortcodes for group expiration and subscription check.
