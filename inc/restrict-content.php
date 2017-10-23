@@ -17,7 +17,12 @@ function sm_get_group_admin( $user_id = 0 ) {
 		return false;
 	}
 
-	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
+
+	if ( 2 > rcpga_group_accounts()->members->count( $group_id ) ) {
+		return false;
+	}
+
 	$members     = rcpga_group_accounts()->members->get_members( $group_id );
 	$group_admin = $members[1]->user_id;
 
