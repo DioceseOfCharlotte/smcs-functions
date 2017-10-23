@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.2 / 2017-10-23
+* add shortcode to check if group as an admin.
+
 #### 1.7.1 / 2017-10-20
 * change backlink on profile single gviews.
 

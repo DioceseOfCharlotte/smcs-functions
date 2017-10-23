@@ -9,15 +9,21 @@ if ( ! function_exists( 'rcp_is_restricted_content' ) ) {
 	return;
 }
 
-function sm_get_group_admin() {
-	if ( ! rcpga_group_accounts()->members->get_group_id() ) {
-		return;
+function sm_get_group_admin( $user_id = 0 ) {
+
+	$user_id = $user_id ?: get_current_user_id();
+
+	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
+		return false;
 	}
 
-	$user_id     = get_current_user_id();
 	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
 	$members     = rcpga_group_accounts()->members->get_members( $group_id );
 	$group_admin = $members[1]->user_id;
+
+	if ( empty( $group_admin ) ) {
+		return false;
+	}
 
 	if ( rcpga_group_accounts()->members->is_group_admin( $group_admin ) ) {
 		return $group_admin;
@@ -25,11 +31,13 @@ function sm_get_group_admin() {
 }
 
 function sm_get_group_expiration( $id = 0 ) {
+
 	if ( ! function_exists( 'rcp_hardset_expiration_dates_load' ) ) {
 		return false;
 	}
+
 	global $rcp_hsed;
-	$id = $id ? $id : sm_get_group_subscription_id();
+	$id = $id ?: sm_get_group_subscription_id();
 
 	$date = '';
 
@@ -40,11 +48,12 @@ function sm_get_group_expiration( $id = 0 ) {
 	return date_format( $date, 'F d, Y' );
 }
 
-function sm_get_group_subscription_id() {
-	$user_id = get_current_user_id();
+function sm_get_group_subscription_id( $user_id = 0 ) {
 
-	if ( ! rcpga_group_accounts()->members->get_group_id() ) {
-		return rcp_is_active() ? rcp_get_subscription_id( $user_id ) : false;
+	$user_id = $user_id ?: get_current_user_id();
+
+	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
+		return rcp_is_active( $user_id ) ? rcp_get_subscription_id( $user_id ) : false;
 	}
 
 	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
@@ -73,11 +82,12 @@ function sm_get_group_subscription_id() {
 	return rcp_get_subscription_id( $user_id );
 }
 
-function sm_get_group_owner_id( $user_id = '0' ) {
-	$user_id = get_current_user_id();
+function sm_get_group_owner_id( $user_id = 0 ) {
 
-	if ( ! rcpga_group_accounts()->members->get_group_id() ) {
-		return rcp_is_active() ? $user_id : false;
+	$user_id = $user_id ?: get_current_user_id();
+
+	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
+		return rcp_is_active( $user_id ) ? $user_id : false;
 	}
 
 	$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );
@@ -86,11 +96,12 @@ function sm_get_group_owner_id( $user_id = '0' ) {
 	return $owner_id;
 }
 
-function sm_get_group_owner_meta( $user_id = '0', $key ) {
-	$user_id = get_current_user_id();
+function sm_get_group_owner_meta( $user_id = 0, $key ) {
 
-	if ( ! rcpga_group_accounts()->members->get_group_id() ) {
-		return rcp_is_active() ? get_user_meta( $user_id, $key, true ) : false;
+	$user_id = $user_id ?: get_current_user_id();
+
+	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
+		return rcp_is_active( $user_id ) ? get_user_meta( $user_id, $key, true ) : false;
 	}
 
 	$group_id = rcpga_group_accounts()->members->get_group_id( $user_id );

@@ -12,6 +12,8 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_group_name', 'sm_group_name_shortcode' );
 	// Add the `[sm_has_subscription id="2"]` shortcode.
 	add_shortcode( 'sm_has_subscription', 'sm_has_subscription_shortcode' );
+	// Add the `[sm_if_group_admin isnot=""]` shortcode.
+	add_shortcode( 'sm_if_group_admin', 'sm_if_group_admin_shortcode' );
 	// Add the `[sm_address]` shortcode.
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
 	// Add the `[sm_students]` shortcode.
@@ -64,6 +66,28 @@ function sm_has_subscription_shortcode( $atts, $content = null ) {
 			return do_shortcode( $content );
 		};
 	} elseif ( sm_get_group_subscription_id() ) {
+		return do_shortcode( $content );
+	}
+
+}
+
+function sm_if_group_admin_shortcode( $atts, $content = null ) {
+
+	// Attributes
+	$atts = shortcode_atts(
+		array(
+			'is'     => get_current_user_id(),
+			'exists' => '',
+		),
+		$atts,
+		'sm_if_group_admin'
+	);
+
+	if ( 'false' == $atts['exists'] ) {
+		if ( ! sm_get_group_admin() ) {
+				return do_shortcode( $content );
+		}
+	} elseif ( rcpga_group_accounts()->members->is_group_admin( $atts['is'] ) ) {
 		return do_shortcode( $content );
 	}
 
