@@ -22,6 +22,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 #### [unreleased]
 
+#### 1.7.3 / 2017-10-23
+* remove styles from plugin. Add to theme.
+
 #### 1.7.2 / 2017-10-23
 * add shortcode to check if group as an admin.
 

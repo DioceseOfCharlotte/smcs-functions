@@ -160,10 +160,7 @@ function sm_students_shortcode( $atts ) {
 	$sm_students        = '';
 
 	if ( sm_get_students( $account_creater_id ) ) {
-
-		if ( sm_get_parent( $account_creater_id ) ) {
-			$sm_students = sm_get_template_part( 'family-students' );
-		}
+		$sm_students = sm_get_template_part( 'family-students' );
 	}
 
 	return $sm_students;

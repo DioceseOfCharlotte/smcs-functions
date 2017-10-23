@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.3 / 2017-10-23
+* remove styles from plugin. Add to theme.
+
 #### 1.7.2 / 2017-10-23
 * add shortcode to check if group as an admin.
 
