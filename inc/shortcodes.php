@@ -12,8 +12,8 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_group_name', 'sm_group_name_shortcode' );
 	// Add the `[sm_has_subscription id="2"]` shortcode.
 	add_shortcode( 'sm_has_subscription', 'sm_has_subscription_shortcode' );
-	// Add the `[sm_if_group_admin isnot=""]` shortcode.
-	add_shortcode( 'sm_if_group_admin', 'sm_if_group_admin_shortcode' );
+	// Add the `[sm_group_is_full not="true"]` shortcode.
+	add_shortcode( 'sm_group_is_full', 'sm_group_is_full_shortcode' );
 	// Add the `[sm_address]` shortcode.
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
 	// Add the `[sm_students]` shortcode.
@@ -71,23 +71,27 @@ function sm_has_subscription_shortcode( $atts, $content = null ) {
 
 }
 
-function sm_if_group_admin_shortcode( $atts, $content = null ) {
+function sm_group_is_full_shortcode( $atts , $content = null ) {
+
+	$user_id     = get_current_user_id();
+	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$total_seats = rcpga_group_accounts()->groups->get_seats_count( $group_id );
+	$used_seats  = rcpga_group_accounts()->groups->get_member_count( $group_id );
 
 	// Attributes
 	$atts = shortcode_atts(
 		array(
-			'is'     => get_current_user_id(),
-			'exists' => '',
+			'not' => '',
 		),
 		$atts,
-		'sm_if_group_admin'
+		'sm_group_is_full'
 	);
 
-	if ( 'false' == $atts['exists'] ) {
-		if ( ! sm_get_group_admin() ) {
+	if ( 'true' == $atts['not'] ) {
+		if ( $total_seats > $used_seats ) {
 				return do_shortcode( $content );
 		}
-	} elseif ( rcpga_group_accounts()->members->is_group_admin( $atts['is'] ) ) {
+	} elseif ( $total_seats <= $used_seats ) {
 		return do_shortcode( $content );
 	}
 
