@@ -117,6 +117,17 @@ function sm_get_group_owner_meta( $user_id = 0, $key ) {
 	}
 }
 
+function sm_group_is_full( $user_id = 0 ) {
+
+	$user_id     = $user_id ?: get_current_user_id();
+	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
+	$total_seats = rcpga_group_accounts()->groups->get_seats_count( $group_id );
+	$used_seats  = rcpga_group_accounts()->groups->get_member_count( $group_id );
+
+		return $total_seats <= $used_seats;
+
+}
+
 // Add registration CPT to RCP default page selections.
 add_action(
 	'current_screen', function() {

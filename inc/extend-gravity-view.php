@@ -56,25 +56,95 @@ function sm_back_link( $back_link ) {
 
 function sm_update_family_admin( $form, $entry_id, $gv_entry ) {
 
-	if ( '40' == $form['id'] ) {
+	if ( '40' != $form['id'] ) {
+		return;
+	}
 
-		if ( ! rcpga_group_accounts()->members->get_group_id() ) {
-			return;
+	$user_id = get_current_user_id();
+
+	if ( ! rcp_is_active( $user_id ) ) {
+		return;
+	}
+
+	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
+		return;
+	}
+
+	$admin_email = $gv_entry->entry['3'];
+	$add_admin   = $gv_entry->entry['37.1'];
+
+	// earlier users may not have the option even though they have an admin.
+	if ( empty( $add_admin ) && ! sm_group_is_full() ) {
+		return;
+	}
+
+	// only create the admin account if the owner chooses to.
+	if ( empty( $admin_email ) ) {
+		return;
+	}
+
+	$admin_first_name   = $gv_entry->entry['4.3'];
+	$admin_last_name    = $gv_entry->entry['4.6'];
+	$admin_display_name = $admin_first_name . ' ' . $admin_last_name;
+	$username           = strtolower( "{$admin_first_name}{$admin_last_name}" );
+	$group_id           = rcpga_group_accounts()->members->get_group_id( $user_id );
+
+	// use the email if for some reason the name fields are empty.
+	if ( empty( $username ) ) {
+		$username = $admin_email;
+	}
+
+	// make the username is unique if it isn't.
+	if ( username_exists( $username ) ) {
+		$i = 2;
+		while ( username_exists( $username . $i ) ) {
+			$i++;
 		}
+		$username = $username . $i;
+	}
 
-		$member_user = sm_get_group_admin();
+	// create a new user if member does not already exist
+	if ( sm_get_group_admin() ) {
 
-		$member_userdata = array(
-			'ID'         => $member_user,
+		$admin_userdata = array(
+			'ID'         => sm_get_group_admin(),
 			'user_email' => $gv_entry->entry['3'],
 			'first_name' => $gv_entry->entry['4.3'],
 			'last_name'  => $gv_entry->entry['4.6'],
 		);
+		$admin_user_id  = wp_update_user( $admin_userdata );
+	} else {
 
-		wp_update_user( $member_userdata );
-
+		$admin_add_args = array(
+			'user_email'   => $admin_email,
+			'first_name'   => $admin_first_name,
+			'last_name'    => $admin_last_name,
+			'user_login'   => $username,
+			'display_name' => $admin_display_name,
+		);
+		$admin_user_id  = wp_insert_user( $admin_add_args );
 	}
 
+	// if this is a new admin add them to a subscription.
+	if ( ! rcp_is_active( $admin_user_id ) ) {
+
+		$add_user_args = array(
+			'subscription_id' => 1,
+			'status'          => 'active',
+		);
+		rcp_add_user_to_subscription( $admin_user_id, $add_user_args );
+	}
+
+	// add the member to the group
+	if ( rcpga_group_accounts()->members->get_group_id( $admin_user_id ) != $group_id ) {
+
+		$add_member_to_group_args = array(
+			'user_id'  => $admin_user_id,
+			'group_id' => $group_id,
+			'role'     => 'admin',
+		);
+		rcpga_group_accounts()->members->add( $add_member_to_group_args );
+	}
 }
 
 function sm_created_by_group( $criteria ) {

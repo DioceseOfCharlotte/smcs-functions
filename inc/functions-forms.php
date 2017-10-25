@@ -5,6 +5,7 @@ add_action( 'gform_user_updated', 'smcs_backup_display_name', 10, 4 );
 add_action( 'gform_user_registered', 'smcs_create_rcp_member', 10, 4 );
 add_filter( 'gform_field_value_sm_subscription', 'sm_subscription_populate' );
 add_filter( 'gform_field_value_is_smaa_member', 'is_user_smaa_member' );
+add_filter( 'gform_field_value_sm_group_full', 'sm_group_full_populate' );
 
 function smcs_parent_username( $username, $feed, $form, $entry ) {
 
@@ -48,6 +49,7 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 		'status'          => 'active',
 	);
 
+	// add the just registered user(owner) to a subscription.
 	rcp_add_user_to_subscription( $user_id, $add_user_args );
 
 	$group_name = $entry['1'];
@@ -60,66 +62,66 @@ function smcs_create_rcp_member( $user_id, $feed, $entry, $user_pass ) {
 		'seats'    => $seat_count,
 	);
 
+	// create a group for the newly registered owner.
 	rcpga_group_accounts()->groups->add( $add_group_accounts_args );
 
-	$group_id            = rcpga_group_accounts()->members->get_group_id( $user_id );
-	$member_email        = $entry['3'];
-	$member_first_name   = $entry['4.3'];
-	$member_last_name    = $entry['4.6'];
-	$send_invite         = empty( $entry['36'] ) ? false : true;
-	$member_display_name = $member_first_name . ' ' . $member_last_name;
-	$username            = strtolower( "{$member_first_name}{$member_last_name}" );
+	$admin_email = $entry['3'];
+	$add_admin   = $entry['37.1'];
 
-	if ( empty( $username ) ) {
-		$username = $member_email;
+	// only create the admin account if the owner chooses to.
+	if ( empty( $add_admin ) || empty( $admin_email ) ) {
+		return;
 	}
 
+	$admin_first_name   = $entry['4.3'];
+	$admin_last_name    = $entry['4.6'];
+	$admin_display_name = $admin_first_name . ' ' . $admin_last_name;
+	$username           = strtolower( "{$admin_first_name}{$admin_last_name}" );
+	$group_id           = rcpga_group_accounts()->members->get_group_id( $user_id );
+
+	// use the email if for some reason the name fields are empty.
+	if ( empty( $username ) ) {
+		$username = $admin_email;
+	}
+
+	// make the username is unique if it isn't.
 	if ( username_exists( $username ) ) {
 		$i = 2;
 		while ( username_exists( $username . $i ) ) {
 			$i++;
 		}
 		$username = $username . $i;
-	};
-
-	if ( ! empty( $member_email ) ) {
-
-		$member_add_args = array(
-			'user_email'   => $member_email,
-			'first_name'   => $member_first_name,
-			'last_name'    => $member_last_name,
-			'user_login'   => $username,
-			'display_name' => $member_display_name,
-		);
-
-		// if ( empty( $args['user_login'] ) ) {
-		// 	$args['user_login'] = $args['user_email'];
-		// }
-
-		// create a new user if member does not already exist
-		if ( $member_user = get_user_by( 'email', $member_email ) ) {
-			$member_user_id = $member_user->ID;
-		} else {
-			$member_user_id = wp_insert_user( $member_add_args );
-		}
-
-		rcp_add_user_to_subscription( $member_user_id, $add_user_args );
-
-		$add_member_to_group_args = array(
-			'user_id'  => $member_user_id,
-			'group_id' => $group_id,
-			'role'     => 'admin',
-		);
-
-		// add the member to the group
-		rcpga_group_accounts()->members->add( $add_member_to_group_args );
-
-		update_user_meta( $member_user_id, 'group_owners_id', $user_id );
-		update_user_meta( $member_user_id, 'sm_group_id', $group_id );
-		update_user_meta( $user_id, 'group_admins_id', $member_user_id );
 	}
 
-	update_user_meta( $user_id, 'sm_group_id', $group_id );
+	$admin_add_args = array(
+		'user_email'   => $admin_email,
+		'first_name'   => $admin_first_name,
+		'last_name'    => $admin_last_name,
+		'user_login'   => $username,
+		'display_name' => $admin_display_name,
+	);
+
+	$admin_user = get_user_by( 'email', $admin_email );
+
+	// create a new user if member does not already exist
+	if ( $admin_user ) {
+		$admin_user_id = $admin_user->ID;
+	} else {
+		$admin_user_id = wp_insert_user( $admin_add_args );
+	}
+
+	// add the admin to a subscription.
+	rcp_add_user_to_subscription( $admin_user_id, $add_user_args );
+
+	$add_admin_to_group_args = array(
+		'user_id'  => $admin_user_id,
+		'group_id' => $group_id,
+		'role'     => 'admin',
+	);
+
+	// add the member to the group
+	rcpga_group_accounts()->members->add( $add_admin_to_group_args );
+
 }
 
 // dynamically populate a GF field with the RPC subscription ID.
@@ -138,7 +140,10 @@ function is_user_smaa_member( $value ) {
 	return false;
 }
 
-
+// dynamically populate a GF field with the RPC subscription ID.
+function sm_group_full_populate( $value ) {
+	return sm_group_is_full();
+}
 
 // Register User Contact Methods
 function custom_user_contact_methods( $user_contact_method ) {

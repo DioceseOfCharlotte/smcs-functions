@@ -22,6 +22,10 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 #### [unreleased]
 
+#### 1.7.4 / 2017-10-25
+* add function and shortcode to check for a full group.
+* add new routines for adding and updating group admins through gravity forms.
+
 #### 1.7.3 / 2017-10-23
 * remove styles from plugin. Add to theme.
 
