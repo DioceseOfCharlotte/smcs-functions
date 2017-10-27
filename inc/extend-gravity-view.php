@@ -14,6 +14,8 @@ function sm_is_profile_view() {
 
 function sm_get_profile_views() {
 	$gv_ids = array(
+		'1866',
+		'1867',
 		'1854',
 		'1814',
 		'1812',

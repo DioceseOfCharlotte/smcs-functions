@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.5 / 2017-10-27
+* add made team Views to profile page.
+
 #### 1.7.4 / 2017-10-25
 * add function and shortcode to check for a full group.
 * add new routines for adding and updating group admins through gravity forms.
