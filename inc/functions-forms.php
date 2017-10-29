@@ -155,3 +155,27 @@ function custom_user_contact_methods( $user_contact_method ) {
 
 }
 add_filter( 'user_contactmethods', 'custom_user_contact_methods' );
+
+
+
+
+
+
+
+
+//add_action( 'gform_post_payment_status', 'smaa_upgrade_member', 10, 8 );
+function smaa_upgrade_member( $feed, $entry, $status, $transaction_id, $subscriber_id, $amount, $pending_reason, $reason ) {
+
+	if ( $status == 'Paid' ) {
+
+		$user_id = $entry['created_by'];
+
+		$args = array(
+			'subscription_id' => 2,
+			'status'          => 'active',
+		);
+
+		rcp_add_user_to_subscription( $user_id, $args );
+	}
+
+}
