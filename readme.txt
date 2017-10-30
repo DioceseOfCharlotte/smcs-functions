@@ -22,6 +22,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 #### [unreleased]
 
+#### 1.7.6 / 2017-10-29
+* Add SMAA Membership when payment is accepted.
+
 #### 1.7.5 / 2017-10-27
 * add made team Views to profile page.
 

@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.6 / 2017-10-29
+* Add SMAA Membership when payment is accepted.
+
 #### 1.7.5 / 2017-10-27
 * add made team Views to profile page.
 

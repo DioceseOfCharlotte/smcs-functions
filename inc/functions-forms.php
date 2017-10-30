@@ -6,6 +6,7 @@ add_action( 'gform_user_registered', 'smcs_create_rcp_member', 10, 4 );
 add_filter( 'gform_field_value_sm_subscription', 'sm_subscription_populate' );
 add_filter( 'gform_field_value_is_smaa_member', 'is_user_smaa_member' );
 add_filter( 'gform_field_value_sm_group_full', 'sm_group_full_populate' );
+add_action( 'gform_paypal_fulfillment', 'smaa_upgrade_member', 10, 4 );
 
 function smcs_parent_username( $username, $feed, $form, $entry ) {
 
@@ -156,26 +157,20 @@ function custom_user_contact_methods( $user_contact_method ) {
 }
 add_filter( 'user_contactmethods', 'custom_user_contact_methods' );
 
+// Add SMAA Membership when payment is accepted.
+function smaa_upgrade_member( $entry, $feed, $transaction_id, $amount ) {
 
-
-
-
-
-
-
-//add_action( 'gform_post_payment_status', 'smaa_upgrade_member', 10, 8 );
-function smaa_upgrade_member( $feed, $entry, $status, $transaction_id, $subscriber_id, $amount, $pending_reason, $reason ) {
-
-	if ( $status == 'Paid' ) {
-
-		$user_id = $entry['created_by'];
-
-		$args = array(
-			'subscription_id' => 2,
-			'status'          => 'active',
-		);
-
-		rcp_add_user_to_subscription( $user_id, $args );
+	if ( '3' != rgar( $entry, 'form_id' ) ) {
+		return;
 	}
+
+	$user_id = $entry['created_by'];
+
+	$args = array(
+		'subscription_id' => 2,
+		'status'          => 'active',
+	);
+
+	rcp_add_user_to_subscription( $user_id, $args );
 
 }
