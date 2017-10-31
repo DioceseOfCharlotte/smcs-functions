@@ -159,28 +159,47 @@ function sm_created_by_group( $criteria ) {
 	$user_id       = get_current_user_id();
 	$group_id      = rcpga_group_accounts()->members->get_group_id( $user_id );
 	$group_members = rcpga_group_accounts()->members->get_members( $group_id );
+	$group_owner   = sm_get_group_owner_id( $user_id );
+	$group_admin   = sm_get_group_admin();
 
-	$members = array();
+	// $members = array();
+	//
+	// if ( $group_members ) {
+	// 	foreach ( $group_members as $member ) {
+	// 		$members[] = $member->user_id;
+	// 	}
+	// }
+	//
+	// $creators = $group_id ? $members : $user_id;
 
-	if ( $group_members ) {
-		foreach ( $group_members as $member ) {
-			$members[] = $member->user_id;
-		}
-	}
-
-	$creators = $group_id ? $members : $user_id;
-
-	$criteria['search_criteria'] = array(
-		'field_filters' => array(
-			array(
-				'key'      => 'created_by',
-				'operator' => 'is',
-				'value'    => $creators,
+	if ( $group_admin ) {
+		$criteria['search_criteria'] = array(
+			'field_filters' => array(
+				array(
+					'key'      => 'created_by',
+					'operator' => 'is',
+					'value'    => $group_owner,
+				),
+				array(
+					'key'      => 'created_by',
+					'operator' => 'is',
+					'value'    => $group_admin,
+				),
+				'mode' => 'any',
 			),
-			'mode' => 'any',
-		),
-	);
-
+		);
+	} else {
+		$criteria['search_criteria'] = array(
+			'field_filters' => array(
+				array(
+					'key'      => 'created_by',
+					'operator' => 'is',
+					'value'    => $user_id,
+				),
+				'mode' => 'any',
+			),
+		);
+	}
 	return $criteria;
 }
 

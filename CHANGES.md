@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.7 / 2017-10-31
+* fix GV criteria filter for groups.
+
 #### 1.7.6 / 2017-10-29
 * Add SMAA Membership when payment is accepted.
 
