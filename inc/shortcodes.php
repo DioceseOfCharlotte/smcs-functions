@@ -16,7 +16,7 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_group_is_full', 'sm_group_is_full_shortcode' );
 	// Add the `[sm_address]` shortcode.
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
-	// Add the `[sm_students]` shortcode.
+	// Add the `[sm_students id='5']` shortcode.
 	add_shortcode( 'sm_students', 'sm_students_shortcode' );
 	// Add the `[sm_parent parent="2"]` shortcode.
 	add_shortcode( 'sm_parent', 'sm_parent_shortcode' );
@@ -71,7 +71,7 @@ function sm_has_subscription_shortcode( $atts, $content = null ) {
 
 }
 
-function sm_group_is_full_shortcode( $atts , $content = null ) {
+function sm_group_is_full_shortcode( $atts, $content = null ) {
 
 	$user_id     = get_current_user_id();
 	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
@@ -160,14 +160,15 @@ function sm_address_shortcode( $atts ) {
 
 function sm_students_shortcode( $atts ) {
 
-	$account_creater_id = sm_get_group_owner_id();
-	$sm_students        = '';
+	$atts = shortcode_atts(
+		array(
+			'id' => sm_get_group_owner_id(),
+		),
+		$atts,
+		'sm_students'
+	);
 
-	if ( sm_get_students( $account_creater_id ) ) {
-		$sm_students = sm_get_template_part( 'family-students' );
-	}
-
-	return $sm_students;
+	return sm_get_students( $atts['id'] );
 }
 
 function sm_parent_shortcode( $atts ) {

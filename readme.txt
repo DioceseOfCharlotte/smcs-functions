@@ -22,6 +22,9 @@ Functions for altering or adding to the default behavior of various plugins on t
 
 #### [unreleased]
 
+#### 1.7.8 / 2017-10-31
+* more useful student list and shortcode.
+
 #### 1.7.7 / 2017-10-31
 * fix GV criteria filter for groups.
 
