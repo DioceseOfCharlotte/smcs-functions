@@ -97,7 +97,7 @@ function sm_get_students( $user_id = 0 ) {
 		}
 
 		if ( ! empty( $student['first'] ) ) {
-			$student_name .= '<div class="sm-student"><span class="sm-firstname">' . $student['first'] . ' </span><span class="sm-lastname">' . $student['last'] . ' </span><span class="sm-grade">' . $grade . '</span></div>';
+			$student_name .= '<div class="sm-student-list-item"><span class="sm-firstname">' . $student['first'] . ' </span><span class="sm-lastname">' . $student['last'] . ' </span><span class="sm-grade">' . $grade . '</span></div>';
 		}
 	}
 

@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.7.9 / 2017-11-6
+* utility functions for directory display.
+
 #### 1.7.8 / 2017-10-31
 * more useful student list and shortcode.
 

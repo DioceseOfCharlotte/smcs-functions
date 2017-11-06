@@ -9,6 +9,19 @@ if ( ! function_exists( 'rcp_is_restricted_content' ) ) {
 	return;
 }
 
+function sm_in_same_group( $other_id, $user_id = 0 ) {
+
+	$user_id = $user_id ?: get_current_user_id();
+
+	if ( ! rcp_is_active( $user_id ) ) {
+		return false;
+	}
+
+	$user_group = rcpga_group_accounts()->members->get_group_id( $user_id );
+
+	return $user_group == rcpga_group_accounts()->members->get_group_id( $other_id );
+}
+
 function sm_get_group_admin( $user_id = 0 ) {
 
 	$user_id = $user_id ?: get_current_user_id();
