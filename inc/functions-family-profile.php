@@ -19,7 +19,7 @@ function sm_get_address( $user_id ) {
 	return $address;
 }
 
-function sm_get_students( $user_id = 0 ) {
+function sm_get_student_array( $user_id = 0 ) {
 
 	$user_id  = $user_id ?: get_current_user_id();
 	$owner_id = sm_get_group_owner_id( $user_id );
@@ -40,7 +40,7 @@ function sm_get_students( $user_id = 0 ) {
 	$s_5_last  = get_user_meta( $owner_id, 'sm_student_5_last', true );
 	$s_5_grade = get_user_meta( $owner_id, 'sm_student_5_grade', true );
 
-	$students = '';
+	$students = array();
 
 	if ( $s_1_first ) {
 		$students = array(
@@ -71,6 +71,74 @@ function sm_get_students( $user_id = 0 ) {
 			),
 		);
 	}
+
+	return $students;
+}
+
+function sm_get_student_names( $user_id = 0 ) {
+
+	$user_id  = $user_id ?: get_current_user_id();
+	$owner_id = sm_get_group_owner_id( $user_id );
+
+	$students = sm_get_student_array( $owner_id );
+
+	$student_name = '';
+
+	foreach ( $students as $student ) {
+
+		if ( ! empty( $student['first'] ) ) {
+			$student_name .= '<span class="sm-firstname">' . $student['first'] . ' </span><span class="sm-lastname">' . $student['last'] . ' </span>';
+		}
+	}
+
+	return $student_name;
+}
+
+function sm_get_student_grades( $user_id = 0 ) {
+
+	$user_id  = $user_id ?: get_current_user_id();
+	$owner_id = sm_get_group_owner_id( $user_id );
+
+	$students = sm_get_student_array( $owner_id );
+
+	$student_grade = '';
+
+	foreach ( $students as $student ) {
+
+		if ( '1' == $student['grade'] ) {
+			$grade = '1st';
+		} elseif ( '2' == $student['grade'] ) {
+			$grade = '2nd';
+		} elseif ( '3' == $student['grade'] ) {
+			$grade = '3rd';
+		} elseif ( '4' == $student['grade'] ) {
+			$grade = '4th';
+		} elseif ( '5' == $student['grade'] ) {
+			$grade = '5th';
+		} elseif ( '6' == $student['grade'] ) {
+			$grade = '6th';
+		} elseif ( '7' == $student['grade'] ) {
+			$grade = '7th';
+		} elseif ( '8' == $student['grade'] ) {
+			$grade = '8th';
+		} else {
+			$grade = 'K';
+		}
+
+		if ( ! empty( $student['first'] ) ) {
+			$student_grade .= $grade;
+		}
+	}
+
+	return $student_grade;
+}
+
+function sm_get_students( $user_id = 0 ) {
+
+	$user_id  = $user_id ?: get_current_user_id();
+	$owner_id = sm_get_group_owner_id( $user_id );
+
+	$students = sm_get_student_array( $owner_id );
 
 	$student_name = '';
 

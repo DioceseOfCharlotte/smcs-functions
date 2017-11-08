@@ -20,6 +20,8 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_address', 'sm_address_shortcode' );
 	// Add the `[sm_students id='5']` shortcode.
 	add_shortcode( 'sm_students', 'sm_students_shortcode' );
+	// Add the `[sm_students id='5']` shortcode.
+	add_shortcode( 'sm_student_grades', 'sm_student_grades_shortcode' );
 	// Add the `[sm_parent parent="2"]` shortcode.
 	add_shortcode( 'sm_parent', 'sm_parent_shortcode' );
 	// Add the `[sm_parents]` shortcode.
@@ -189,6 +191,19 @@ function sm_students_shortcode( $atts ) {
 	);
 
 	return sm_get_students( $atts['id'] );
+}
+
+function sm_student_grades_shortcode( $atts ) {
+
+	$atts = shortcode_atts(
+		array(
+			'id' => sm_get_group_owner_id(),
+		),
+		$atts,
+		'sm_student_grades'
+	);
+
+	return sm_get_student_grades( $atts['id'] );
 }
 
 function sm_parent_shortcode( $atts ) {

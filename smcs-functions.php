@@ -101,6 +101,10 @@ final class SmcsFunctions {
 		require_once( $this->dir . 'inc/functions-login-styles.php' );
 		require_once( $this->dir . 'inc/functions-family-profile.php' );
 		require_once( $this->dir . 'inc/extend-gravity-view.php' );
+
+		if ( is_admin() ) {
+			require_once( $this->dir . 'inc/class-smcs-settings.php' );
+		}
 	}
 
 	/**
