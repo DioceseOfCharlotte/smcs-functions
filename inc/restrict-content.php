@@ -70,8 +70,12 @@ function sm_get_group_subscription_id( $user_id = 0 ) {
 
 	$user_id = $user_id ?: get_current_user_id();
 
+	if ( ! rcp_is_active( $user_id ) ) {
+		return;
+	}
+
 	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
-		return rcp_is_active( $user_id ) ? rcp_get_subscription_id( $user_id ) : false;
+		return rcp_is_active( $user_id ) ? get_user_meta( $user_id, 'rcp_subscription_level', true ) : false;
 	}
 
 	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
@@ -82,7 +86,7 @@ function sm_get_group_subscription_id( $user_id = 0 ) {
 	}
 
 	if ( rcpga_group_accounts()->members->is_group_admin( $user_id ) ) {
-		return rcp_get_subscription_id( $user_id );
+		return get_user_meta( $user_id, 'rcp_subscription_level', true );
 	}
 
 	$members    = rcpga_group_accounts()->members->get_members( $group_id );
@@ -90,11 +94,11 @@ function sm_get_group_subscription_id( $user_id = 0 ) {
 	$member_two = $members[1]->user_id;
 
 	if ( rcpga_group_accounts()->members->is_group_admin( $member_two ) ) {
-		return rcp_get_subscription_id( $member_two );
+		return get_user_meta( $member_two, 'rcp_subscription_level', true );
 	}
 
 	if ( rcpga_group_accounts()->members->is_group_admin( $member_one ) ) {
-		return rcp_get_subscription_id( $member_one );
+		return get_user_meta( $member_one, 'rcp_subscription_level', true );
 	}
 
 	return rcp_get_subscription_id( $user_id );

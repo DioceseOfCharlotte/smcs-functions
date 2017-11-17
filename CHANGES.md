@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.8.0 / 2017-11-17
+* get user meta rather than using RCP funtion.
+
 #### 1.7.9 / 2017-11-6
 * utility functions for directory display.
 

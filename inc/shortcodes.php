@@ -12,6 +12,8 @@ function smcs_register_shortcodes() {
 	add_shortcode( 'sm_group_expiration', 'sm_group_expiration_shortcode' );
 	// Add the `[sm_group_name]` shortcode.
 	add_shortcode( 'sm_group_name', 'sm_group_name_shortcode' );
+	// Add the `[sm_subscription_id id="2"]` shortcode.
+	add_shortcode( 'sm_subscription_id', 'sm_subscription_id_shortcode' );
 	// Add the `[sm_has_subscription id="2"]` shortcode.
 	add_shortcode( 'sm_has_subscription', 'sm_has_subscription_shortcode' );
 	// Add the `[sm_group_is_full not="true"]` shortcode.
@@ -37,6 +39,21 @@ function sm_group_name_shortcode() {
 	$sm_family          = rcpga_group_accounts()->members->get_group_name( $account_creater_id );
 
 	return $sm_family;
+}
+
+function sm_subscription_id_shortcode( $atts ) {
+
+	// Attributes
+	$atts = shortcode_atts(
+		array(
+			'id' => '',
+		),
+		$atts,
+		'sm_subscription_id'
+	);
+
+	return sm_get_group_subscription_id( $atts['id'] );
+
 }
 
 function sm_if_same_group_shortcode( $atts, $content = null ) {
