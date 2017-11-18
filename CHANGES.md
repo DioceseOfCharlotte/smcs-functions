@@ -1,5 +1,8 @@
 # Change Log
 
+#### 1.8.1 / 2017-11-18
+* a better subscription ID function.
+
 #### 1.8.0 / 2017-11-17
 * get user meta rather than using RCP funtion.
 

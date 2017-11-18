@@ -74,34 +74,20 @@ function sm_get_group_subscription_id( $user_id = 0 ) {
 		return;
 	}
 
-	if ( ! rcpga_group_accounts()->members->get_group_id( $user_id ) ) {
-		return rcp_is_active( $user_id ) ? get_user_meta( $user_id, 'rcp_subscription_level', true ) : false;
-	}
-
 	$group_id    = rcpga_group_accounts()->members->get_group_id( $user_id );
 	$group_count = rcpga_group_accounts()->members->count( $group_id );
 
+	// if not part of a group, just get the users level.
 	if ( 2 > absint( $group_count ) ) {
 		return rcp_get_subscription_id( $user_id );
 	}
 
-	if ( rcpga_group_accounts()->members->is_group_admin( $user_id ) ) {
-		return get_user_meta( $user_id, 'rcp_subscription_level', true );
-	}
+	$members = rcpga_group_accounts()->members->get_members( $group_id );
 
-	$members    = rcpga_group_accounts()->members->get_members( $group_id );
-	$member_one = $members[0]->user_id;
-	$member_two = $members[1]->user_id;
+	$member_one = get_user_meta( $members[0]->user_id, 'rcp_subscription_level', true );
+	$member_two = get_user_meta( $members[1]->user_id, 'rcp_subscription_level', true );
 
-	if ( rcpga_group_accounts()->members->is_group_admin( $member_two ) ) {
-		return get_user_meta( $member_two, 'rcp_subscription_level', true );
-	}
-
-	if ( rcpga_group_accounts()->members->is_group_admin( $member_one ) ) {
-		return get_user_meta( $member_one, 'rcp_subscription_level', true );
-	}
-
-	return rcp_get_subscription_id( $user_id );
+	return $member_two > $member_one ? $member_two : $member_one;
 }
 
 function sm_get_group_owner_id( $user_id = 0 ) {
